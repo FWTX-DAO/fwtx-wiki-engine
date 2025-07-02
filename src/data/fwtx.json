@@ -1,0 +1,559 @@
+{
+    "metadata": {
+      "title": "Fort Worth and Tarrant County Public Services Crawling Guide",
+      "description": "Comprehensive URL directory for web crawling public service information across Fort Worth city government, Tarrant County government, 311 services, and community resources",
+      "last_updated": "2025-07-02",
+      "total_population_served": "2,000,000+",
+      "geographic_coverage": "Fort Worth, Texas and Tarrant County"
+    },
+    "fort_worth_city_services": {
+      "category_description": "Official Fort Worth city government departments and services for municipal operations",
+      "main_website": {
+        "url": "https://www.fortworthtexas.gov",
+        "description": "Official Fort Worth city homepage providing access to all city services for 1+ million residents", 
+        "contact": "817-392-1234",
+        "crawl_priority": "high"
+      },
+      "utilities": {
+        "category_description": "Water, wastewater, electric, and waste management services",
+        "water_services": {
+          "contact": "817-392-4477",
+          "description": "Drinking water, wastewater, reclaimed water service, bill payment, account management",
+          "service_hours": "7 AM - 7 PM, Monday-Friday",
+          "online_services": ["bill payment", "account management", "service transfers"]
+        },
+        "utility_administration": {
+          "description": "Electric and natural gas municipal facility accounts, franchise agreements, telecommunications revenue"
+        }
+      },
+      "permits_licensing": {
+        "category_description": "Building permits, development services, contractor registration",
+        "building_permits": {
+          "description": "Residential and commercial building permits, grading permits, contractor registration",
+          "data_portal": "https://data.fortworthtexas.gov/Development-Infrastructure/Development-Permits/quz7-xnsy",
+          "crawl_priority": "high"
+        },
+        "development_services": {
+          "description": "Pre-development consultations, CFW Permit Tool, Accela system, platting and zoning", 
+          "services": ["pre-development info", "permit tools", "building inspections"]
+        }
+      },
+      "code_compliance": {
+        "category_description": "Code enforcement, building standards, neighborhood investigations",
+        "description": "Oversees Animal Care & Control and Code Enforcement, violation reporting for junked vehicles, high grass, trash/debris", 
+        "services": ["violation reporting", "multi-family inspections", "food establishment inspections"],
+        "data_updates": "3x daily, Monday-Friday"
+      },
+      "animal_services": {
+        "category_description": "Animal Care & Control services, adoption, and enforcement",
+        "location": "4900 Martin Street",
+        "capacity": "366 animals",
+        "facility_size": "18,000 sq ft",
+        "services": ["pet adoption", "foster programs", "lost and found", "animal abuse reporting", "volunteer programs", "low-cost veterinary services"]
+      },
+      "transportation_public_works": {
+        "category_description": "Street maintenance, traffic management, parking, flood response",
+        "contact": "817-392-1234",
+        "services": [
+          "surface street maintenance",
+          "sidewalk programs", 
+          "parking management",
+          "traffic signals and signs",
+          "pavement marking",
+          "rail crossings",
+          "storm water channels",
+          "flood and street condition reporting",
+          "street permits",
+          "downtown parking"
+        ]
+      },
+      "parks_recreation": {
+        "category_description": "Parks, sports facilities, pools, community centers, recreation programs",
+        "contact": "817-392-5700",
+        "facilities": "300+ parks, 13,000+ acres", 
+        "services": ["sports facilities", "pools", "tennis courts", "trails", "playgrounds", "dog parks", "community centers"],
+        "park_hours": "5:00 AM - 11:30 PM", 
+        "online_services": ["reservations", "mobile app", "memberships", "scheduling"]
+      },
+      "planning_development": {
+        "category_description": "Long-range planning, zoning, platting services, comprehensive planning",
+        "services": ["zoning and platting", "conditional use permits", "future land use planning", "interactive zoning maps"],
+        "resources": ["Zoning Ordinance", "Comprehensive Plan", "GIS services"]
+      },
+      "additional_departments": {
+        "city_manager": {
+          "description": "Non-political administrative office overseeing day-to-day city operations" 
+        },
+        "human_relations": {
+          "contact": "817-392-7525", 
+          "services": ["civil rights enforcement", "anti-discrimination ordinance", "business equity", "accessibility accommodations"]
+        },
+        "gis_services": {
+          "description": "Infrastructure and service data collection, interactive mapping tools" 
+        },
+        "economic_development": {
+          "contact": "817-392-6021", 
+          "services": ["business development", "business attraction", "labor pool information"]
+        },
+        "medstar_ems": {
+          "description": "Emergency medical services and ambulance care serving Fort Worth and 14 surrounding cities", 
+          "transition_note": "Transitioning to Fort Worth Fire Department in July 2025" 
+        },
+        "municipal_court": {
+          "services": ["traffic violation processing", "non-traffic violations", "citation payment", "warrant lookup"]
+        }
+      }
+    },
+    "fort_worth_311_services": {
+      "category_description": "Comprehensive 311 service request system for Fort Worth residents",
+      "main_portal": {
+        "url": "https://www.fortworthtexas.gov/customercare", 
+        "description": "Customer Care division including City Call Center and MyFW service requests",
+        "phone": "311 (wireless) or 817-392-1234", 
+        "crawl_priority": "high"
+      },
+      "myfw_mobile_app": {
+        "platforms": ["iOS", "Android", "iPad", "Apple Vision"],
+        "app_names": ["MyFW - Fort Worth Resident app", "My Fort Worth (MyFW)"], 
+        "downloads": "27,000+",
+        "features": [
+          "GPS-enabled location reporting",
+          "photo documentation", 
+          "request status tracking",
+          "push notifications", 
+          "Spanish language support", 
+          "voice dictation",
+          "offline capability",
+          "map integration" 
+        ],
+        "requirements": "iOS 13.4+", 
+        "crawl_priority": "high"
+      },
+      "service_request_methods": {
+        "text_service": "Text 'HELLO' to 817-835-MYFW (6939)",
+        "chat_services": "Available through website and app", 
+        "tracking": "Unique tracking numbers with real-time updates",
+        "multilingual": "English, Spanish, other languages available"
+      },
+      "service_categories": {
+        "code_enforcement": [
+          "high grass and weeds violations",
+          "illegal dumping reporting", 
+          "junk vehicles",
+          "substandard structures",
+          "zoning issues",
+          "building code violations", 
+          "property maintenance"
+        ],
+        "transportation_infrastructure": [
+          "pothole reporting", 
+          "street light outages",  
+          "traffic signal malfunctions", 
+          "stop sign issues",
+          "street maintenance",
+          "sidewalk repairs",
+          "right-of-way issues"
+        ],
+        "animal_control": [
+          "stray animal reporting",
+          "animal control services", 
+          "too many animals violations",
+          "animal-related health violations" 
+        ],
+        "waste_environmental": [
+          "garbage collection issues",
+          "recycling collection problems",
+          "bulk waste pickup",
+          "yard waste collection",
+          "environmental violations"
+        ],
+        "other_services": [
+          "parking enforcement", 
+          "graffiti removal",  
+          "emergency storm drain clogs",
+          "water service emergencies", 
+          "parks and recreation issues",
+          "permit information"
+        ]
+      },
+      "contact_hours": "Monday-Friday, 8:00 AM to 5:00 PM", 
+      "additional_apps": {
+        "garbage_recycling": "Fort Worth Garbage & Recycling App", 
+        "water_services": "MyH2O for usage monitoring and bill payment" 
+      }
+    },
+    "tarrant_county_services": {
+      "category_description": "Tarrant County government services serving 2+ million residents", 
+      "main_website": {
+        "url": "https://www.tarrantcountytx.gov",
+        "description": "Official Tarrant County website serving as central hub for all county departments and services",
+        "crawl_priority": "high"
+      },
+      "tax_assessor_collector": {
+        "url": "https://www.tarrantcountytx.gov/tax-assessor-collector",
+        "contact": "Rick D. Barnes, Tax Assessor-Collector",
+        "phone": "817-884-1110",
+        "services": [
+          "property tax payments and searches", 
+          "motor vehicle registration and titles", 
+          "alcoholic beverage permits", 
+          "online payment portal"
+        ],
+        "features": ["enhanced online portal", "wait time system",  "drop box payments",  "e-check and credit card options"], 
+        "crawl_priority": "high"
+      },
+      "county_clerk": {
+        "url": "https://www.tarrantcountytx.gov/county-clerk",
+        "contact": "Mary Louise Nicholson, County Clerk", 
+        "location": "100 W. Weatherford, Fort Worth, TX 76196",
+        "phone": "817-884-1195",
+        "services": [
+          "vital records (birth, death, marriage certificates)", 
+          "marriage license issuance", 
+          "assumed name (DBA) filings", 
+          "military discharge record (DD214) recording", 
+          "county court records", 
+          "commissioners court records"
+        ],
+        "crawl_priority": "high"
+      },
+      "public_health": {
+        "url": "https://www.tarrantcountytx.gov/public-health",
+        "phone": "817-248-6299", 
+        "wic_services": "817-321-5400", 
+        "description": "Nationally accredited health department", 
+        "services": [
+          "clinical services (immunizations, STD/STI testing)", 
+          "disease surveillance and prevention", 
+          "environmental health services",
+          "laboratory services", 
+          "maternal and child health programs",
+          "WIC nutrition program", 
+          "travel health services", 
+          "tuberculosis elimination", 
+          "refugee health services" 
+        ],
+        "locations": ["Fort Worth main campus",  "Arlington",  "other community sites"],
+        "crawl_priority": "high"
+      },
+      "courts_system": {
+        "url": "https://www.tarrantcountytx.gov/courts",
+        "description": "Comprehensive court system with multiple court types",
+        "components": {
+          "district_courts": "27 District Courts handling civil, family, and felony criminal cases", 
+          "county_courts_law": "Civil cases ($500-$25,000), family law, appeals",
+          "criminal_courts": "11 district courts (felony), 10 county criminal courts (misdemeanor)",
+          "probate_courts": "Estate matters, guardianships, mental health cases", 
+          "justice_peace": "Local magistrate courts"
+        },
+        "services": [
+          "case filing and records",
+          "jury services", 
+          "court calendars and dockets",
+          "e-filing systems", 
+          "virtual court hearings",
+          "public access terminals" 
+        ],
+        "crawl_priority": "high"
+      },
+      "sheriff_office": {
+        "url": "https://www.tarrantcountytx.gov/sheriff",
+        "contact": "Sheriff Bill E. Waybourn", 
+        "address": "200 Taylor St, Fort Worth, TX 76102", 
+        "phone": "817-884-3099",
+        "services": [
+          "law enforcement operations",
+          "detention/jail operations",
+          "court security",
+          "civil process service",
+          "human trafficking unit",
+          "intelligence operations", 
+          "emergency response"
+        ]
+      },
+      "elections_office": {
+        "url": "https://www.tarrantcountytx.gov/elections",
+        "address": "2700 Premier St., Fort Worth, TX",
+        "phone": "817-831-8683", 
+        "services": [
+          "voter registration", 
+          "election administration", 
+          "early voting coordination",
+          "vote center operations", 
+          "ballot by mail services",
+          "election results",
+          "voter lookup services"
+        ],
+        "crawl_priority": "medium"
+      },
+      "human_services": {
+        "url": "https://www.tarrantcountytx.gov/human-services",
+        "address": "201 N. Rupert Street, Suite 107, Fort Worth, TX 76107",
+        "hours": "Monday-Friday, 8 a.m. - 3:30 p.m.",
+        "services": [
+          "temporary financial assistance", 
+          "emergency assistance programs",
+          "case management services",
+          "rent, mortgage, utilities assistance",
+          "resource connection and referrals",
+          "crisis intervention services"
+        ],
+        "eligibility": "Tarrant County residents who are unemployed, disabled, or facing crisis"
+      },
+      "environmental_services": {
+        "public_health_environmental": {
+          "phone": "817-321-4960",
+          "services": [
+            "food establishment inspections and permits",
+            "public swimming pool inspections",
+            "on-site sewage facility permits",
+            "vector control services",
+            "storm water quality monitoring",
+            "environmental health education",
+            "air quality and ozone information"
+          ]
+        },
+        "transportation_environmental": {
+          "services": [
+            "household hazardous waste disposal voucher program", 
+            "Fort Worth Environmental Collection Center partnership" 
+          ]
+        }
+      },
+      "additional_departments": {
+        "district_clerk": {
+          "contact": "Thomas A. Wilder, District Clerk", 
+          "address": "100 N. Calhoun St., Fort Worth, TX 76196", 
+          "phone": "817-884-1574", 
+          "services": ["district court records",  "civil citations",  "criminal warrants",  "e-filing services"] 
+        },
+        "veteran_services": {
+          "services": ["benefits assistance", "resource connection for veterans and families"]
+        },
+        "juvenile_services": {
+          "services": ["juvenile detention", "probation services", "family support programs"]
+        },
+        "medical_examiner": {
+          "services": ["death investigations", "autopsy services", "forensic pathology"]
+        }
+      }
+    },
+    "transportation_public_transit": {
+      "category_description": "Public transportation and transit services for Fort Worth and Tarrant County",
+      "trinity_metro": {
+        "url": "https://ridetrinitymetro.org",
+        "description": "Primary transit authority serving Fort Worth and surrounding areas", 
+        "contact": "817-215-8600", 
+        "services": [
+          "32 bus routes with 1,589 stops", 
+          "TEXRail service to DFW Airport", 
+          "Trinity Railway Express (TRE) to Dallas", 
+          "On-Demand rideshare",
+          "ACCESS paratransit", 
+          "vanpools",
+          "bike sharing"
+        ],
+        "fares": {
+          "regular": "$2 per ride", 
+          "reduced": "$1 for seniors 65+, veterans, disabled, youth 5-19",
+          "day_pass": "$4"
+        },
+        "crawl_priority": "high"
+      },
+      "paratransit_services": {
+        "access_paratransit": {
+          "description": "ADA-compliant service for riders with disabilities"
+        },
+        "on_demand": {
+          "description": "Shared ride service in Alliance, Mercantile, Southside, and South Tarrant neighborhoods",
+          "booking": "Via smartphone app or call 817-215-8600" 
+        }
+      }
+    },
+    "public_safety_emergency": {
+      "category_description": "Police, fire, emergency management, and public safety services",
+      "fort_worth_police": {
+        "emergency": "911",
+        "non_emergency": "817-392-4222", 
+        "main_contact": "817-392-4200", 
+        "services": [
+          "crime prevention",
+          "investigation", 
+          "emergency response",
+          "SWAT",
+          "K-9",
+          "crisis intervention teams"
+        ],
+        "online_services": ["crime reporting", "police report requests"]
+      },
+      "fort_worth_fire": {
+        "emergency": "911",
+        "headquarters": "1000 Throckmorton, Fort Worth, TX 76102", 
+        "emergency_management": "817-392-6170",
+        "services": [
+          "fire protection", 
+          "EMS",
+          "emergency preparedness", 
+          "fire prevention", 
+          "arson investigation" 
+        ]
+      },
+      "tarrant_county_sheriff": {
+        "non_emergency": "817-884-1213", 
+        "administration": "817-884-3099",
+        "address": "100 E. Weatherford, Fort Worth, TX 76196",
+        "services": [
+          "county law enforcement",
+          "detention",
+          "human trafficking unit"
+        ]
+      },
+      "emergency_management": {
+        "fort_worth_cert": {
+          "description": "Community Emergency Response Team training through Police Department"
+        },
+        "health_alert_network": {
+          "description": "Official health and safety notification system for Tarrant County"
+        }
+      }
+    },
+    "community_resources": {
+      "category_description": "Social services, housing assistance, and community support programs",
+      "housing_assistance": {
+        "fort_worth_housing_solutions": {
+          "services": [
+            "Housing Choice Vouchers (Section 8)", 
+            "homeless assistance",
+            "mainstream vouchers for disabled"
+          ],
+          "payment_structure": "Tenants pay 30% of adjusted income toward approved rent"
+        },
+        "tarrant_county_housing": {
+          "services": [
+            "Housing Choice Voucher Program", 
+            "Section 8 rental assistance"
+          ],
+          "mission": "Safe, decent, affordable housing for extremely low to low-income families" 
+        },
+        "hud_fort_worth": {
+          "address": "307 W 7th Street, Suite 1000, Fort Worth, TX 76102",
+          "services": [
+            "housing counseling",
+            "fair housing complaints",
+            "rental assistance information"
+          ],
+          "hotline": "800-569-4287"
+        }
+      },
+      "social_assistance": {
+        "community_action_partners": {
+          "services": [
+            "utility assistance",
+            "heating/cooling repair",
+            "emergency financial assistance"
+          ],
+          "target": "Economically disadvantaged individuals, families, elderly in Tarrant County" 
+        },
+        "tarrant_county_human_services": {
+          "services": [
+            "case management",
+            "financial assistance (limited mortgage, rent, transportation)"
+          ],
+          "eligibility": "Tarrant County residents with unemployment/disability/crisis situations",
+          "intake": "Monday-Thursday, 8:00 AM - 12:00 PM"
+        }
+      },
+      "senior_services": {
+        "silver_stars_program": {
+          "description": "Serves 600+ low-income/isolated seniors", 
+          "services": ["holiday care packages", "basic needs assistance"]
+        }
+      },
+      "youth_services": {
+        "elevate_north_texas": {
+          "target": "Youth ages 18-24 experiencing homelessness",
+          "services": [
+            "short-term host homes (up to 4 months)",
+            "emergency shelter",
+            "hotel partnerships" 
+          ]
+        }
+      },
+      "mental_health": {
+        "mhmr_tarrant_county": {
+          "services": ["mental health and substance use disorder services"]
+        },
+        "icare_crisis_line": {
+          "description": "24/7 crisis support" 
+        },
+        "mobile_crisis_team": {
+          "description": "Face-to-face crisis services for children, adolescents, adults" 
+        }
+      }
+    },
+    "key_faq_resources": {
+      "category_description": "Important FAQ and Q&A pages for AI agent reference",
+      "high_priority_faqs": [
+        {
+          "category": "311 Services",
+          "description": "MyFW app usage, service request categories, tracking system",
+          "location": "Fort Worth 311 portal and app documentation"
+        },
+        {
+          "category": "Permits and Licensing", 
+          "description": "Building permit requirements, contractor registration, development process",
+          "location": "Fort Worth Development Services pages"
+        },
+        {
+          "category": "Code Compliance",
+          "description": "Violation reporting, property maintenance standards, enforcement process",
+          "location": "Fort Worth Code Compliance department pages"
+        },
+        {
+          "category": "Tax Services",
+          "description": "Property tax payment, motor vehicle registration, online services",
+          "location": "Tarrant County Tax Assessor-Collector pages"
+        },
+        {
+          "category": "Vital Records",
+          "description": "Birth certificates, death certificates, marriage licenses",
+          "location": "Tarrant County Clerk office pages"
+        },
+        {
+          "category": "Transit Services",
+          "description": "Routes, schedules, fares, accessibility services",
+          "location": "Trinity Metro website"
+        },
+        {
+          "category": "Emergency Services",
+          "description": "When to call 911 vs non-emergency, preparedness information",
+          "location": "Fort Worth Fire Department and Police Department pages"
+        }
+      ]
+    },
+    "crawling_configuration": {
+      "recommended_crawl_frequency": {
+        "high_priority": "Weekly",
+        "medium_priority": "Bi-weekly", 
+        "low_priority": "Monthly"
+      },
+      "content_types_to_extract": [
+        "service descriptions",
+        "contact information",
+        "hours of operation",
+        "fee schedules",
+        "application forms",
+        "FAQ sections",
+        "process instructions",
+        "eligibility requirements",
+        "deadlines and important dates"
+      ],
+      "data_validation_points": [
+        "phone number format verification",
+        "address format standardization",
+        "hours of operation consistency",
+        "URL accessibility checks",
+        "content freshness indicators"
+      ]
+    }
+  }

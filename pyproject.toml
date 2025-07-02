@@ -1,0 +1,11 @@
+[project]
+name = "fwtx-wiki"
+version = "0.0.1"
+description = "Fort Worth DAO Wiki powered by Knowledge Graphs & AI Agents"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "falkordb>=1.2.0",
+    "graphiti-core[google-genai]>=0.15.0",
+    "python-dotenv>=1.1.1",
+]
