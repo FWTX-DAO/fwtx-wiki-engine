@@ -18,4 +18,3 @@ The intent of this project is to provide a greenfield oppotunity to come into th
 `docker run -p 6379:6379 -p 3000:3000 -it --rm falkordb/falkordb:latest`
 4. Run the script
 `uv run wiki.py`
-
