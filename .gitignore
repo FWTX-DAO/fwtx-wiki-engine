@@ -12,3 +12,5 @@ wheels/
 # Environment Variables
 .env
 
+# Apple File System (macOS)
+.DS_Store
