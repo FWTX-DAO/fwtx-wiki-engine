@@ -12,7 +12,7 @@ from graphiti_core.nodes import EpisodeType
 from graphiti_core.search.search_config_recipes import NODE_HYBRID_SEARCH_RRF
 
 from graphiti_core.driver.falkordb_driver import FalkorDriver
-from episodes import add_episodes
+from src.models.ontology import add_episode
 
 # FalkorDB connection using FalkorDriver
 falkor_driver = FalkorDriver(
@@ -46,10 +46,8 @@ async def init():
 
     try:
         # Initialize the graph database with graphiti's indices. This only needs to be done once.
-        await graphiti.build_indices_and_constraints()
-        await add_episodes(graphiti)
-        # Additional code will go here
-        
+        #await graphiti.build_indices_and_constraints()
+        await add_episode(graphiti)
     finally:
         # Close the connection
         await graphiti.close()
@@ -58,6 +56,7 @@ async def init():
 async def main():
     # Main function implementation will go here
     # Perform a hybrid search combining semantic similarity and BM25 retrieval
+    await init()
     print("\nSearching for: 'Who is the City Manager of Fort Worth?'")
     results = await graphiti.search('Who is the City Manager of Fort Worth?')
 
