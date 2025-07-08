@@ -16,6 +16,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.models.ontology import add_episode
 from src.db.falkor import falkor_driver
+from src.config import settings
+from src.api.search import router
 
 # Configure logging
 logging.basicConfig(
@@ -103,5 +105,6 @@ app.add_middleware(
 app.include_router(router)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    import uvicorn
+    uvicorn.run("wiki:app", host="0.0.0.0", port=8001, reload=True)
 

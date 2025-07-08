@@ -1,26 +1,26 @@
 from fastapi import APIRouter, Depends, UploadFile
 
-from app.core.security import get_api_key
-from models.search import SearchResponse
-from services.markdown_service import convert_file_to_text
+from src.middleware.auth import get_api_key
+from src.models.search import SearchResponse
 
 router = APIRouter()
 
-@router.post("/search", response_model=ConversionResponse, tags=["search"])
+@router.post("/search", response_model=SearchResponse, tags=["search"])
 async def search_knowledge_graph(
+    query: str,
     authenticated: bool = Depends(get_api_key)
 ):
     """
-    Convert a file to markdown
+    Search the knowledge graph
     
-    - **file**: File to convert
+    - **query**: Search query
     
-    Returns the converted markdown
+    Returns search results from the knowledge graph
     """
-    text = await convert_file_to_text(file)
-    return {"result": text}
+    # TODO: Implement knowledge graph search
+    return {"results": [], "query": query}
 
-@router.get("/health", response_model=HealthResponse, tags=["system"])
+@router.get("/health", tags=["system"])
 async def health_check():
     """
     Health check endpoint

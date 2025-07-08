@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     FALKORDB_USERNAME: str | None = os.getenv("FALKORDB_USERNAME")
     FALKORDB_PASSWORD: str | None = os.getenv("FALKORDB_PASSWORD")
 
+    # PostgreSQL Settings
+    PG_USER: str = os.getenv("PG_USER", "")
+    PG_PASSWORD: str = os.getenv("PG_PASSWORD", "")
+    PG_URL: str = os.getenv("PG_URL", "")
+
     # OpenAI API Settings (optional)
     OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
     OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY")

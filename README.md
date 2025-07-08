@@ -8,6 +8,10 @@ The intent of this project is to provide a greenfield oppotunity to come into th
 - Python 3.13
 - OpenAI API (Subject to change or privacy)
 
+## Dependencies
+- uv (Recommended) for Python Virtual Environment and package management
+- Docker (Recommended) for FalkorDB
+
 ## Setup
 
 1. Clone the repository
