@@ -13,8 +13,11 @@ from fastapi.staticfiles import StaticFiles
 
 from src.config import settings
 from src.api.chat import router
+from src.api.sync import router as sync_router
+from src.api.research import router as research_router
 
 from src.services.graphiti.index import init as graphiti_init
+from src.services.sync.scheduler import start_sync_scheduler, stop_sync_scheduler
 
 # Configure logging
 logging.basicConfig(
@@ -54,10 +57,25 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Failed to start Graphiti initialization: {e}")
     
+    # Start sync scheduler if enabled
+    if os.getenv("ENABLE_SYNC_SCHEDULER", "false").lower() == "true":
+        try:
+            logger.info("Starting data sync scheduler...")
+            start_sync_scheduler()
+            logger.info("Data sync scheduler started")
+        except Exception as e:
+            logger.error(f"Failed to start sync scheduler: {e}")
+    
     yield
     
     # Shutdown event
     logger.info("Shutting down FWTX Wiki API")
+    
+    # Stop sync scheduler
+    try:
+        stop_sync_scheduler()
+    except Exception as e:
+        logger.error(f"Error stopping sync scheduler: {e}")
 
 
 async def initialize_graphiti(load_sample_data: bool):
@@ -92,6 +110,8 @@ app.add_middleware(
 
 # Include routers
 app.include_router(router)
+app.include_router(sync_router)
+app.include_router(research_router)
 
 # Mount static files
 app.mount("/", StaticFiles(directory="client", html=True), name="static")

@@ -1,13 +1,46 @@
+import logging
 from graphiti_core import Graphiti
-from graphiti_core.nodes import EpisodeType, RawEpisode
+from graphiti_core.nodes import EpisodeType
 from graphiti_core.search.search_config_recipes import NODE_HYBRID_SEARCH_RRF
-
+from graphiti_core.utils.bulk_utils import RawEpisode
+from graphiti_core.llm_client.gemini_client import GeminiClient, LLMConfig
+from graphiti_core.embedder.gemini import GeminiEmbedder, GeminiEmbedderConfig
+from graphiti_core.cross_encoder.gemini_reranker_client import GeminiRerankerClient
 from src.db.falkor import falkor_driver
 from src.models.ontology import add_episode as add_ontology_episode
-from src.services.sync.fort_worth_data import create_sample_episodes
+from src.services.sync.fort_worth_data import initialize_live_research
+from src.config import settings
 
-# Initialize Graphiti with Neo4j connection
-graphiti = Graphiti(graph_driver=falkor_driver)
+logger = logging.getLogger(__name__)
+
+# Validate API key configuration
+if not settings.GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY must be set for Graphiti with Gemini")
+
+# Initialize Graphiti with Gemini clients
+graphiti = Graphiti(
+    graph_driver=falkor_driver,
+    llm_client=GeminiClient(
+        config=LLMConfig(
+            api_key=settings.GOOGLE_API_KEY,
+            model=settings.GEMINI_MODEL  # gemini-2.0-flash
+        )
+    ),
+    embedder=GeminiEmbedder(
+        config=GeminiEmbedderConfig(
+            api_key=settings.GOOGLE_API_KEY,
+            embedding_model=settings.GEMINI_EMBEDDING_MODEL  # text-embedding-004
+        )
+    ),
+    cross_encoder=GeminiRerankerClient(
+        config=LLMConfig(
+            api_key=settings.GOOGLE_API_KEY,
+            model=settings.GEMINI_PRO_MODEL  # gemini-2.0-flash-exp for reranking
+        )
+    )
+)
+
+logger.info(f"Graphiti initialized with Gemini models: LLM={settings.GEMINI_MODEL}, Reranker={settings.GEMINI_PRO_MODEL}")
 
 async def init(load_sample_data: bool = False):
     """

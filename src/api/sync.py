@@ -3,25 +3,13 @@ API endpoints for data synchronization management.
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
-from typing import Literal
 
 from src.middleware.auth import get_api_key
 from src.services.sync.scheduler import manual_sync, get_scheduler_status
 
+from src.models.sync import SyncRequest, SyncResponse
+
 router = APIRouter(prefix="/api/sync", tags=["sync"])
-
-
-class SyncRequest(BaseModel):
-    sync_type: Literal["full", "incremental", "services", "governance"] = "incremental"
-
-
-class SyncResponse(BaseModel):
-    status: str
-    sync_type: str
-    timestamp: str
-    error: str = None
-
 
 @router.post("/trigger", response_model=SyncResponse)
 async def trigger_sync(

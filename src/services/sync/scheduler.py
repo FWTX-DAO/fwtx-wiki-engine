@@ -14,6 +14,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from src.services.graphiti.index import graphiti
 from src.services.sync.fort_worth_data import FortWorthDataSync
+from src.services.agent.researcher import FortWorthResearchWorkflow
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ class DataSyncScheduler:
     def __init__(self):
         self.scheduler = AsyncIOScheduler()
         self.sync_service = FortWorthDataSync(graphiti)
+        self.research_workflow = FortWorthResearchWorkflow(graphiti)
         self.is_running = False
         
     def start(self):
@@ -76,20 +78,76 @@ class DataSyncScheduler:
             logger.info("Data sync scheduler stopped")
     
     async def _run_daily_sync(self):
-        """Run daily incremental sync."""
-        logger.info("Starting daily data sync...")
+        """Run daily incremental sync with live data."""
+        logger.info("Starting daily live data sync...")
         try:
-            # Sync only recent updates
-            await self.sync_service.sync_from_fwtx_json()
+            # Fetch live data configurations
+            fetch_tasks = await self.sync_service.run_live_data_fetch()
+            
+            # Process all tasks with research workflow
+            episodes = await self.research_workflow.research_all_tasks(fetch_tasks)
+            
+            # Add episodes to graph
+            if episodes:
+                await self.graphiti.add_episode_bulk(episodes)
+                logger.info(f"Added {len(episodes)} episodes from research")
+                    
             logger.info("Daily sync completed successfully")
         except Exception as e:
             logger.error(f"Daily sync failed: {e}")
     
     async def _run_weekly_full_sync(self):
-        """Run weekly full sync."""
+        """Run weekly full sync with comprehensive research."""
         logger.info("Starting weekly full sync...")
         try:
-            await self.sync_service.run_full_sync()
+            # Get all data fetch tasks
+            fetch_tasks = await self.sync_service.run_live_data_fetch()
+            
+            # Add additional comprehensive research tasks
+            comprehensive_tasks = [
+                {
+                    "name": "Recent City Council Meetings",
+                    "config": {
+                        "search_queries": [
+                            "Fort Worth city council meeting minutes 2024",
+                            "Fort Worth city council agenda recent",
+                            "Fort Worth city council decisions ordinances"
+                        ],
+                        "data_needed": [
+                            "recent_decisions",
+                            "new_ordinances",
+                            "policy_changes",
+                            "budget_amendments"
+                        ]
+                    }
+                },
+                {
+                    "name": "City Projects and Initiatives",
+                    "config": {
+                        "search_queries": [
+                            "Fort Worth capital projects 2024",
+                            "Fort Worth city initiatives programs",
+                            "Fort Worth infrastructure improvements"
+                        ],
+                        "data_needed": [
+                            "project_names",
+                            "project_budgets",
+                            "timelines",
+                            "responsible_departments"
+                        ]
+                    }
+                }
+            ]
+            
+            all_tasks = fetch_tasks + comprehensive_tasks
+            
+            # Process all tasks with research workflow
+            episodes = await self.research_workflow.research_all_tasks(all_tasks)
+            
+            if episodes:
+                await self.graphiti.add_episode_bulk(episodes)
+                logger.info(f"Added {len(episodes)} episodes from comprehensive research")
+                    
             logger.info("Weekly full sync completed successfully")
         except Exception as e:
             logger.error(f"Weekly full sync failed: {e}")

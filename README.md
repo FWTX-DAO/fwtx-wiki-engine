@@ -67,8 +67,11 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 ### Key Features:
 - **Temporal Knowledge Graph**: Bi-temporal data model tracking both event occurrence and data recording times
 - **Texas-Specific Ontology**: Models home-rule cities, council-manager government, and Texas Local Government Code structures
-- **GraphRAG-Powered Search**: Combines graph traversal with LLM-based retrieval for intelligent query responses
-- **Entity Resolution**: Automatic deduplication using embeddings and similarity search
+- **GraphRAG-Powered Search**: Combines graph traversal with LLM-based retrieval using Google Gemini
+- **AI Research Agents**: Autonomous agents using Agno framework with Gemini models for live data collection
+- **Live Data Synchronization**: Scheduled updates from official Fort Worth sources
+- **Interactive Web Client**: Modern UI with graph visualization and chat interface
+- **Entity Resolution**: Automatic deduplication using Gemini embeddings and similarity search
 - **Open Source Protocol**: TOP provides a reusable standard for any Texas municipality
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -79,7 +82,9 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 * [![FastAPI][FastAPI]][FastAPI-url]
 * [![FalkorDB][FalkorDB]][FalkorDB-url]
 * [![Graphiti][Graphiti]][Graphiti-url]
-* [![Google AI][GoogleAI]][GoogleAI-url]
+* [![Google Gemini][Gemini]][Gemini-url]
+* [![Agno][Agno]][Agno-url]
+* [![Cytoscape.js][Cytoscape]][Cytoscape-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -115,7 +120,7 @@ To get a local copy up and running follow these simple steps.
    cp .env.example .env
    ```
    Edit `.env` and add your:
-   - `OPENAI_API_KEY` (required for embeddings/LLM)
+   - `GOOGLE_API_KEY` (required for Gemini LLM/embeddings)
    - Optional: API authentication key, PostgreSQL settings
 
 4. Start FalkorDB
@@ -128,22 +133,55 @@ To get a local copy up and running follow these simple steps.
    uv run wiki.py
    ```
 
+6. Access the web interface
+   Open your browser to http://localhost:8001
+
+### Optional: Enable Automated Data Sync
+
+To enable automated data synchronization:
+
+```sh
+# Add to your .env file
+ENABLE_SYNC_SCHEDULER=true
+SYNC_INTERVAL_HOURS=24  # How often to sync data
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Once running, the Fort Worth Wiki API provides endpoints for:
+### Web Interface
+
+The Fort Worth Wiki includes a modern web client interface accessible at http://localhost:8001
+
+**Features:**
+- **Knowledge Graph Visualization**: Interactive graph view using Cytoscape.js
+- **AI-Powered Chat**: Natural language queries with suggested questions
+- **Real-time Updates**: Live connection status and graph refresh
+- **Export Functionality**: Download graph data for analysis
+
+### API Endpoints
 
 ```python
-# Search for information about Fort Worth services
-GET /api/search?q=city+council+meetings
-
-# Query the knowledge graph with natural language
-POST /api/query
+# Chat with the knowledge graph (GraphRAG)
+POST /chat
 {
-  "query": "Who is the current mayor of Fort Worth?"
+  "message": "Who is the current mayor of Fort Worth?"
 }
+
+# Trigger AI research on a specific topic
+POST /api/research/topic
+{
+  "topic": "city budget",
+  "data_requirements": ["total_budget", "department_allocations"]
+}
+
+# Manual data synchronization
+POST /api/sync/trigger
+
+# Get sync status
+GET /api/sync/status
 ```
 
 ### Example Queries:
@@ -151,6 +189,7 @@ POST /api/query
 - "Show me the city council districts and their representatives"
 - "When are the next municipal elections?"
 - "What ordinances were passed in the last month?"
+- "How does Fort Worth's government structure work?"
 
 _For more examples, please refer to the [API Documentation](http://localhost:8001/docs)_
 
@@ -175,12 +214,14 @@ See [artifacts/TOP.md](artifacts/TOP.md) for the complete specification.
 
 - [x] Define Texas Ontology Protocol (TOP)
 - [x] Implement temporal knowledge graph with FalkorDB
-- [ ] Complete search API implementation
-- [ ] Add data ingestion pipeline for Fort Worth data
-- [ ] Implement GraphRAG query engine
-- [ ] Create citizen-friendly web interface
+- [x] Complete chat API implementation with GraphRAG
+- [x] Add AI agent system for live data research
+- [x] Implement GraphRAG query engine with Graphiti
+- [x] Create citizen-friendly web interface
+- [x] Add automated data synchronization with scheduler
 - [ ] Extend to support multiple Texas municipalities
-- [ ] Add real-time data synchronization
+- [ ] Add more data sources (county, state integration)
+- [ ] Implement real-time event streaming
 
 See the [open issues](https://github.com/FWTX-DAO/fwtx-wiki-engine/issues) for a full list of proposed features (and known issues).
 
@@ -264,5 +305,9 @@ Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/
 [FalkorDB-url]: https://www.falkordb.com/
 [Graphiti]: https://img.shields.io/badge/Graphiti-4A90E2?style=for-the-badge&logo=graphql&logoColor=white
 [Graphiti-url]: https://github.com/getzep/graphiti
-[GoogleAI]: https://img.shields.io/badge/Google_AI-4285F4?style=for-the-badge&logo=google&logoColor=white
-[GoogleAI-url]: https://ai.google/
+[Gemini]: https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white
+[Gemini-url]: https://ai.google.dev/
+[Agno]: https://img.shields.io/badge/Agno-FF6B6B?style=for-the-badge&logo=robot&logoColor=white
+[Agno-url]: https://github.com/phidatahq/agno
+[Cytoscape]: https://img.shields.io/badge/Cytoscape.js-2A4E8C?style=for-the-badge&logo=javascript&logoColor=white
+[Cytoscape-url]: https://js.cytoscape.org/
