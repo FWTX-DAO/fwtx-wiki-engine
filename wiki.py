@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from src.config import settings
 from src.api.chat import router
 
-from src.services.graphiti.index import init
+from src.services.graphiti.index import init as graphiti_init
 
 # Configure logging
 logging.basicConfig(
@@ -42,10 +42,33 @@ async def lifespan(app: FastAPI):
     if not settings.API_KEY:
         logger.warning("API_KEY not set in environment. Authentication is disabled.")
     
+    # Initialize Graphiti knowledge graph
+    try:
+        logger.info("Initializing Graphiti knowledge graph...")
+        # Check if we should load sample data (e.g., from environment variable)
+        load_sample_data = os.getenv("LOAD_SAMPLE_DATA", "false").lower() == "true"
+        
+        # Run initialization in a background task to not block startup
+        asyncio.create_task(initialize_graphiti(load_sample_data))
+        logger.info("Graphiti initialization started in background")
+    except Exception as e:
+        logger.error(f"Failed to start Graphiti initialization: {e}")
+    
     yield
     
     # Shutdown event
     logger.info("Shutting down FWTX Wiki API")
+
+
+async def initialize_graphiti(load_sample_data: bool):
+    """Background task to initialize Graphiti."""
+    try:
+        await graphiti_init(load_sample_data=load_sample_data)
+        logger.info("Graphiti initialization completed successfully")
+    except Exception as e:
+        logger.error(f"Graphiti initialization failed: {e}")
+        # Continue running even if initialization fails
+        # The app can still serve static files and handle basic requests
 
 # Create FastAPI app
 app = FastAPI(
