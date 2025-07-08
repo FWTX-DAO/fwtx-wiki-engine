@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fort Worth Knowledge Graph</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Cytoscape.js for graph visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.27.0/cytoscape.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        #graph-container {
+            height: calc(100vh - 200px);
+            min-height: 500px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-2xl font-bold text-gray-900">Fort Worth Knowledge Graph</h1>
+                <div class="text-sm text-gray-500">
+                    Powered by Texas Ontology Protocol (TOP) v0.0.1
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Tabs -->
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button id="graph-tab" class="tab-button border-indigo-500 text-indigo-600 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" data-tab="graph">
+                    Knowledge Graph
+                </button>
+                <button id="chat-tab" class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm" data-tab="chat">
+                    Chat Interface
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="mt-6">
+            <!-- Graph Tab -->
+            <div id="graph-content" class="tab-content active">
+                <div class="bg-white shadow rounded-lg p-4">
+                    <div class="mb-4">
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <input
+                                    type="text"
+                                    id="graph-search"
+                                    placeholder="Search entities (e.g., 'City of Fort Worth', 'Mayor')"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                            </div>
+                            <button id="search-graph-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Graph Container -->
+                    <div id="graph-container" class="border border-gray-200 rounded-md bg-gray-50"></div>
+                    
+                    <!-- Graph Controls -->
+                    <div class="mt-4 flex flex-wrap gap-4">
+                        <button id="reset-graph" type="button" class="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                            Reset View
+                        </button>
+                        <button id="fit-graph" type="button" class="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                            Fit to Screen
+                        </button>
+                        <select id="layout-select" class="px-3 py-1 text-sm border border-gray-300 rounded">
+                            <option value="cose">Force-Directed</option>
+                            <option value="breadthfirst">Hierarchical</option>
+                            <option value="circle">Circle</option>
+                            <option value="grid">Grid</option>
+                            <option value="concentric">Concentric</option>
+                        </select>
+                        <button id="export-graph" type="button" class="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">
+                            Export Graph
+                        </button>
+                        <div class="text-sm text-gray-500">
+                            Nodes: <span id="node-count">0</span> | Edges: <span id="edge-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="chat-content" class="tab-content">
+                <div class="bg-white shadow rounded-lg p-4">
+                    <div class="h-96 border border-gray-200 rounded-md p-4 overflow-y-auto mb-4" id="chat-messages">
+                        <div class="text-gray-500 text-center py-8">
+                            <div class="mb-4">
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2">Welcome to Fort Worth Knowledge Graph!</h3>
+                                <p>Ask me anything about Fort Worth's government, services, or structure.</p>
+                            </div>
+                            
+                            <!-- Suggested queries -->
+                            <div class="mt-6">
+                                <p class="text-sm text-gray-600 mb-2">Try asking:</p>
+                                <div class="space-y-2">
+                                    <button type="button" class="suggested-query text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors">
+                                        Who is the current mayor of Fort Worth?
+                                    </button>
+                                    <button type="button" class="suggested-query text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors">
+                                        What type of government does Fort Worth have?
+                                    </button>
+                                    <button type="button" class="suggested-query text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors">
+                                        How many council districts are there?
+                                    </button>
+                                    <button type="button" class="suggested-query text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors">
+                                        When was Fort Worth incorporated?
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <input
+                            type="text"
+                            id="chat-input"
+                            placeholder="Ask about Fort Worth (e.g., 'Who is the city manager?', 'What services does the city provide?')"
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <button id="send-chat" type="button" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+                            Send
+                        </button>
+                    </div>
+                    
+                    <!-- Connection status -->
+                    <div id="connection-status" class="mt-2 text-xs text-gray-500">
+                        <span id="status-indicator" class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                        Connected to Fort Worth Knowledge Graph API
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Info Panel (shown when node is selected) -->
+    <div id="info-panel" class="hidden fixed right-0 top-0 h-full w-96 bg-white shadow-lg p-6 overflow-y-auto">
+        <button id="close-info" type="button" title="Close panel" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        <div id="info-content">
+            <!-- Entity details will be populated here -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/app.js"></script>
+</body>
+</html>

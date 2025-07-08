@@ -1,0 +1,90 @@
+/* Custom styles for Fort Worth Knowledge Graph */
+
+/* Typing indicator animation */
+@keyframes typing {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+.typing-indicator {
+    animation: typing 1.5s infinite;
+}
+
+/* Graph container styling */
+#graph-container {
+    background: linear-gradient(to bottom right, #f9fafb, #e5e7eb);
+    position: relative;
+}
+
+/* Node highlighting */
+.highlighted {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+/* Info panel animation */
+#info-panel {
+    transition: transform 0.3s ease-out;
+    transform: translateX(100%);
+}
+
+#info-panel:not(.hidden) {
+    transform: translateX(0);
+}
+
+/* Chat messages */
+#chat-messages {
+    background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}

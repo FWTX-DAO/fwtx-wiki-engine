@@ -9,9 +9,10 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from src.config import settings
-from src.api.search import router
+from src.api.chat import router
 
 from src.services.graphiti.index import init
 
@@ -68,6 +69,9 @@ app.add_middleware(
 
 # Include routers
 app.include_router(router)
+
+# Mount static files
+app.mount("/", StaticFiles(directory="client", html=True), name="static")
 
 if __name__ == '__main__':
     import uvicorn
