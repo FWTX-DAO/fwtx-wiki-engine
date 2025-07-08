@@ -238,7 +238,6 @@ Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/
 * [FalkorDB](https://www.falkordb.com/) - High-performance graph database
 * [City of Fort Worth](https://www.fortworthtexas.gov/) - Municipal data and documentation
 * [Texas Municipal League](https://www.tml.org/) - Texas government structure resources
-* [Best-README-Template](https://github.com/othneildrew/Best-README-Template) - README template
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

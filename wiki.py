@@ -7,17 +7,13 @@ from logging import INFO
 
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-
-from graphiti_core import Graphiti
-from graphiti_core.nodes import EpisodeType
-from graphiti_core.search.search_config_recipes import NODE_HYBRID_SEARCH_RRF
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.models.ontology import add_episode
-from src.db.falkor import falkor_driver
 from src.config import settings
 from src.api.search import router
+
+from src.services.graphiti.index import init
 
 # Configure logging
 logging.basicConfig(
@@ -60,37 +56,6 @@ app = FastAPI(
     redoc_url="/redoc" if settings.DOCS_ENABLED else None,
     openapi_url="/openapi.json" if settings.DOCS_ENABLED else None,
 )
-
-# Initialize Graphiti with Neo4j connection
-graphiti = Graphiti(graph_driver=falkor_driver)
-
-async def init():
-    try:
-        # Initialize the graph database with graphiti's indices. This only needs to be done once.
-        await graphiti.build_indices_and_constraints()
-        await add_episode(graphiti)
-    finally:
-        # Close the connection
-        await graphiti.close()
-        print('\nConnection closed')
-
-async def main():
-    # Main function implementation will go here
-    # Perform a hybrid search combining semantic similarity and BM25 retrieval
-    # await init() if running for the first time
-    print("\nSearching for: 'Who is the City Manager of Fort Worth?'")
-    results = await graphiti.search('Who is the City Manager of Fort Worth?')
-
-    # Print search results
-    print('\nSearch Results:')
-    for result in results:
-        print(f'UUID: {result.uuid}')
-        print(f'Fact: {result.fact}')
-        if hasattr(result, 'valid_at') and result.valid_at:
-            print(f'Valid from: {result.valid_at}')
-        if hasattr(result, 'invalid_at') and result.invalid_at:
-            print(f'Valid until: {result.invalid_at}')
-        print('---')
 
 # CORS middleware
 app.add_middleware(
