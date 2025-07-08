@@ -1,4 +1,4 @@
-# Texas Ontology Protocol (TOP) v1.0
+# Texas Ontology Protocol (TOP) v0.0.1
 
 ## Abstract
 
@@ -423,9 +423,7 @@ Jurisdictions may extend TOP by:
 
 ## Version History
 
-- v1.0 (2024-01): Initial release
-- v0.9 (2023-11): Public comment draft
-- v0.1 (2023-06): Initial working draft
+- v0.0.1 (2024-01): Initial release
 
 ## License
 
