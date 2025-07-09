@@ -67,11 +67,11 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 ### Key Features:
 - **Temporal Knowledge Graph**: Bi-temporal data model tracking both event occurrence and data recording times
 - **Texas-Specific Ontology**: Models home-rule cities, council-manager government, and Texas Local Government Code structures
-- **GraphRAG-Powered Search**: Combines graph traversal with LLM-based retrieval using Google Gemini
-- **AI Research Agents**: Autonomous agents using Agno framework with Gemini models for live data collection
+- **GraphRAG-Powered Search**: Combines graph traversal with LLM-based retrieval for intelligent query responses
+- **AI Research Agents**: Autonomous agents using Agno framework for live data collection
 - **Live Data Synchronization**: Scheduled updates from official Fort Worth sources
 - **Interactive Web Client**: Modern UI with graph visualization and chat interface
-- **Entity Resolution**: Automatic deduplication using Gemini embeddings and similarity search
+- **Entity Resolution**: Automatic deduplication using embeddings and similarity search
 - **Open Source Protocol**: TOP provides a reusable standard for any Texas municipality
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -82,7 +82,7 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 * [![FastAPI][FastAPI]][FastAPI-url]
 * [![FalkorDB][FalkorDB]][FalkorDB-url]
 * [![Graphiti][Graphiti]][Graphiti-url]
-* [![Google Gemini][Gemini]][Gemini-url]
+* [![Google AI][GoogleAI]][GoogleAI-url]
 * [![Agno][Agno]][Agno-url]
 * [![Cytoscape.js][Cytoscape]][Cytoscape-url]
 
@@ -120,7 +120,7 @@ To get a local copy up and running follow these simple steps.
    cp .env.example .env
    ```
    Edit `.env` and add your:
-   - `GOOGLE_API_KEY` (required for Gemini LLM/embeddings)
+   - `OPENAI_API_KEY` (required for embeddings/LLM)
    - Optional: API authentication key, PostgreSQL settings
 
 4. Start FalkorDB
@@ -145,8 +145,6 @@ To enable automated data synchronization:
 ENABLE_SYNC_SCHEDULER=true
 SYNC_INTERVAL_HOURS=24  # How often to sync data
 ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -236,9 +234,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b feature-texas-cyber-awesomeness`)
+3. Commit your Changes (`git commit -m 'Add sure-texas-cyber-awesomeness'`)
+4. Push to the Branch (`git push origin feature-texas-cyber-awesomeness`)
 5. Open a Pull Request
 
 ### Focus Areas for Contributions:
@@ -305,8 +303,8 @@ Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/
 [FalkorDB-url]: https://www.falkordb.com/
 [Graphiti]: https://img.shields.io/badge/Graphiti-4A90E2?style=for-the-badge&logo=graphql&logoColor=white
 [Graphiti-url]: https://github.com/getzep/graphiti
-[Gemini]: https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white
-[Gemini-url]: https://ai.google.dev/
+[GoogleAI]: https://img.shields.io/badge/Google_AI-4285F4?style=for-the-badge&logo=google&logoColor=white
+[GoogleAI-url]: https://ai.google/
 [Agno]: https://img.shields.io/badge/Agno-FF6B6B?style=for-the-badge&logo=robot&logoColor=white
 [Agno-url]: https://github.com/phidatahq/agno
 [Cytoscape]: https://img.shields.io/badge/Cytoscape.js-2A4E8C?style=for-the-badge&logo=javascript&logoColor=white
