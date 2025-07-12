@@ -74,7 +74,6 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 - **Entity Resolution**: Automatic deduplication using embeddings and similarity search
 - **Open Source Protocol**: TOP provides a reusable standard for any Texas municipality
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
@@ -86,7 +85,6 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 * [![Agno][Agno]][Agno-url]
 * [![Cytoscape.js][Cytoscape]][Cytoscape-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -192,7 +190,6 @@ GET /api/sync/status
 
 _For more examples, please refer to the [API Documentation](http://localhost:8001/docs)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- TEXAS ONTOLOGY PROTOCOL -->
 ## Texas Ontology Protocol
@@ -206,7 +203,6 @@ The Texas Ontology Protocol (TOP) is a comprehensive standard for modeling Texas
 
 See [artifacts/TOP.md](artifacts/TOP.md) for the complete specification.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -224,7 +220,6 @@ See [artifacts/TOP.md](artifacts/TOP.md) for the complete specification.
 
 See the [open issues](https://github.com/FWTX-DAO/fwtx-wiki-engine/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -247,7 +242,6 @@ Don't forget to give the project a star! Thanks again!
 - Improving entity resolution algorithms
 - Creating visualization tools for the knowledge graph
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Top contributors:
 
@@ -260,16 +254,14 @@ Don't forget to give the project a star! Thanks again!
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
 
-FWTX DAO - [@FWTXDAO](https://twitter.com/FWTX_DAO) - contact@fwtx.org
+FWTX DAO - [@FWTXDAO](https://twitter.com/FWTX_DAO) - community@fwtx.city
 
 Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/FWTX-DAO/fwtx-wiki-engine)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
@@ -279,7 +271,6 @@ Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/
 * [City of Fort Worth](https://www.fortworthtexas.gov/) - Municipal data and documentation
 * [Texas Municipal League](https://www.tml.org/) - Texas government structure resources
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -308,5 +299,3 @@ Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/
 [OpenAI-url]: https://openai.com/
 [Agno]: https://img.shields.io/badge/Agno-FF6B6B?style=for-the-badge&logo=robot&logoColor=white
 [Agno-url]: https://github.com/phidatahq/agno
-[Cytoscape]: https://img.shields.io/badge/Cytoscape.js-2A4E8C?style=for-the-badge&logo=javascript&logoColor=white
-[Cytoscape-url]: https://js.cytoscape.org/
