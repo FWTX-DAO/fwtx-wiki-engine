@@ -21,15 +21,6 @@ if not settings.OPENAI_API_KEY:
 # Initialize Graphiti with OpenAI clients (default)
 graphiti = Graphiti(
     graph_driver=falkor_driver,
-    llm_client=OpenAIClient(
-        api_key=settings.OPENAI_API_KEY,
-        model=settings.OPENAI_MODEL,
-        base_url=settings.OPENAI_API_BASE
-    ),
-    embedder=OpenAIEmbedder(
-        api_key=settings.OPENAI_API_KEY,
-        base_url=settings.OPENAI_API_BASE
-    )
 )
 
 logger.info(f"Graphiti initialized with OpenAI model: {settings.OPENAI_MODEL}")

@@ -225,7 +225,9 @@ dependencies = [
     { name = "duckduckgo-search" },
     { name = "falkordb" },
     { name = "fastapi" },
-    { name = "graphiti-core", extra = ["google-genai"] },
+    { name = "google-genai" },
+    { name = "graphiti-core" },
+    { name = "openai" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "pypdf2" },
@@ -241,7 +243,9 @@ requires-dist = [
     { name = "duckduckgo-search", specifier = ">=8.1.1" },
     { name = "falkordb", specifier = ">=1.2.0" },
     { name = "fastapi", specifier = ">=0.115.14" },
-    { name = "graphiti-core", extras = ["google-genai"], specifier = ">=0.15.0" },
+    { name = "google-genai", specifier = ">=0.6.0" },
+    { name = "graphiti-core", specifier = ">=0.15.0" },
+    { name = "openai", specifier = ">=1.93.0" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
     { name = "pypdf2", specifier = ">=3.0.0" },
@@ -322,11 +326,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/da/c6/92da04ebeff7bb0b73a6458da418bad0e3ad9958f367bf8e72f129fc0c03/graphiti_core-0.15.0.tar.gz", hash = "sha256:ef485ba9a326a22b0aa50fbe8eaa8347c24834f9ce4e540a8865a5c93a7c7ff3", size = 6447360 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c4/e5/830c3d06d34b73ba02721fbcab122ac818de68f0aaf3df1bbc0b9fc6f05f/graphiti_core-0.15.0-py3-none-any.whl", hash = "sha256:ec1c3b0e5d558bf271724e063c06fa5ae989cc9295da49e303fad944b3695726", size = 133973 },
-]
-
-[package.optional-dependencies]
-google-genai = [
-    { name = "google-genai" },
 ]
 
 [[package]]

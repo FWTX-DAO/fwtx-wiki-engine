@@ -11,7 +11,7 @@ import json
 import logging
 
 from agno.agent import Agent, RunResponse
-from agno.models.openai import OpenAI
+from agno.models.openai import OpenAIChat
 from agno.team.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
@@ -37,10 +37,8 @@ else:
 # Helper function to create OpenAI model
 def create_openai_model(model_id: str, **kwargs):
     """Create an OpenAI model."""
-    return OpenAI(
+    return OpenAIChat(
         id=model_id,
-        api_key=settings.OPENAI_API_KEY,
-        base_url=settings.OPENAI_API_BASE,
         **kwargs
     )
 
