@@ -55,6 +55,13 @@ class Settings(BaseSettings):
     AGENT_MAX_RETRIES: int = int(os.getenv("AGENT_MAX_RETRIES", "3"))
     AGENT_TIMEOUT_SECONDS: int = int(os.getenv("AGENT_TIMEOUT_SECONDS", "300"))
     
+    # Enhanced Sync Settings
+    SYNC_USE_AI_AGENT: bool = os.getenv("SYNC_USE_AI_AGENT", "true").lower() in ("1", "true", "yes")
+    SYNC_PDF_EXTRACTION: bool = os.getenv("SYNC_PDF_EXTRACTION", "true").lower() in ("1", "true", "yes")
+    SYNC_RESEARCH_BATCH_SIZE: int = int(os.getenv("SYNC_RESEARCH_BATCH_SIZE", "5"))
+    LOAD_INITIAL_DATA: bool = os.getenv("LOAD_INITIAL_DATA", "false").lower() in ("1", "true", "yes")
+    SYNC_MODE: str = os.getenv("SYNC_MODE", "initial")
+    
     # Search Configuration
     SEARCH_RESULT_LIMIT: int = int(os.getenv("SEARCH_RESULT_LIMIT", "10"))
     SEARCH_INCLUDE_RELATIONSHIPS: bool = os.getenv("SEARCH_INCLUDE_RELATIONSHIPS", "true").lower() in ("1", "true", "yes")

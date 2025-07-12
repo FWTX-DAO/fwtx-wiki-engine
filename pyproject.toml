@@ -7,7 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "falkordb>=1.2.0",
     "fastapi>=0.115.14",
-    "graphiti-core[google-genai]>=0.15.0",
+    "graphiti-core>=0.15.0",
     "pydantic-settings>=2.10.1",
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
@@ -16,4 +16,5 @@ dependencies = [
     "agno>=1.7.1",
     "anthropic>=0.57.1",
     "duckduckgo-search>=8.1.1",
+    "pypdf2>=3.0.0",
 ]

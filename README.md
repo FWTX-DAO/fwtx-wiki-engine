@@ -68,7 +68,7 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 - **Temporal Knowledge Graph**: Bi-temporal data model tracking both event occurrence and data recording times
 - **Texas-Specific Ontology**: Models home-rule cities, council-manager government, and Texas Local Government Code structures
 - **GraphRAG-Powered Search**: Combines graph traversal with LLM-based retrieval for intelligent query responses
-- **AI Research Agents**: Autonomous agents using Agno framework for live data collection
+- **AI Research Agents**: Autonomous agents using Agno framework with OpenAI for live data collection
 - **Live Data Synchronization**: Scheduled updates from official Fort Worth sources
 - **Interactive Web Client**: Modern UI with graph visualization and chat interface
 - **Entity Resolution**: Automatic deduplication using embeddings and similarity search
@@ -82,7 +82,7 @@ Fort Worth Wiki provides citizens with intelligent access to Fort Worth municipa
 * [![FastAPI][FastAPI]][FastAPI-url]
 * [![FalkorDB][FalkorDB]][FalkorDB-url]
 * [![Graphiti][Graphiti]][Graphiti-url]
-* [![Google AI][GoogleAI]][GoogleAI-url]
+* [![OpenAI][OpenAI]][OpenAI-url]
 * [![Agno][Agno]][Agno-url]
 * [![Cytoscape.js][Cytoscape]][Cytoscape-url]
 
@@ -121,6 +121,7 @@ To get a local copy up and running follow these simple steps.
    ```
    Edit `.env` and add your:
    - `OPENAI_API_KEY` (required for embeddings/LLM)
+   - Optional: `OPENAI_MODEL` (defaults to gpt-4o-mini), `OPENAI_API_BASE` for custom endpoints
    - Optional: API authentication key, PostgreSQL settings
 
 4. Start FalkorDB
@@ -303,8 +304,8 @@ Project Link: [https://github.com/FWTX-DAO/fwtx-wiki-engine](https://github.com/
 [FalkorDB-url]: https://www.falkordb.com/
 [Graphiti]: https://img.shields.io/badge/Graphiti-4A90E2?style=for-the-badge&logo=graphql&logoColor=white
 [Graphiti-url]: https://github.com/getzep/graphiti
-[GoogleAI]: https://img.shields.io/badge/Google_AI-4285F4?style=for-the-badge&logo=google&logoColor=white
-[GoogleAI-url]: https://ai.google/
+[OpenAI]: https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white
+[OpenAI-url]: https://openai.com/
 [Agno]: https://img.shields.io/badge/Agno-FF6B6B?style=for-the-badge&logo=robot&logoColor=white
 [Agno-url]: https://github.com/phidatahq/agno
 [Cytoscape]: https://img.shields.io/badge/Cytoscape.js-2A4E8C?style=for-the-badge&logo=javascript&logoColor=white

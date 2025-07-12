@@ -48,12 +48,13 @@ async def lifespan(app: FastAPI):
     # Initialize Graphiti knowledge graph
     try:
         logger.info("Initializing Graphiti knowledge graph...")
-        # Check if we should load sample data (e.g., from environment variable)
-        load_sample_data = os.getenv("LOAD_SAMPLE_DATA", "false").lower() == "true"
+        # Check if we should load initial data
+        load_initial_data = os.getenv("LOAD_INITIAL_DATA", "false").lower() == "true"
+        sync_mode = os.getenv("SYNC_MODE", "initial")  # 'initial' or 'live'
         
         # Run initialization in a background task to not block startup
-        asyncio.create_task(initialize_graphiti(load_sample_data))
-        logger.info("Graphiti initialization started in background")
+        asyncio.create_task(initialize_graphiti(load_initial_data, sync_mode))
+        logger.info(f"Graphiti initialization started in background (mode: {sync_mode})")
     except Exception as e:
         logger.error(f"Failed to start Graphiti initialization: {e}")
     
@@ -78,11 +79,15 @@ async def lifespan(app: FastAPI):
         logger.error(f"Error stopping sync scheduler: {e}")
 
 
-async def initialize_graphiti(load_sample_data: bool):
+async def initialize_graphiti(load_initial_data: bool, sync_mode: str = "initial"):
     """Background task to initialize Graphiti."""
     try:
-        await graphiti_init(load_sample_data=load_sample_data)
+        await graphiti_init(load_initial_data_flag=load_initial_data, sync_mode=sync_mode)
         logger.info("Graphiti initialization completed successfully")
+        
+        # If initial data was loaded, log some statistics
+        if load_initial_data:
+            logger.info(f"Initial data loaded using {sync_mode} mode")
     except Exception as e:
         logger.error(f"Graphiti initialization failed: {e}")
         # Continue running even if initialization fails

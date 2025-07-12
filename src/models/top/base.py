@@ -132,7 +132,7 @@ class TOPEntity(TemporalMixin, SourceAttributionMixin, BaseModel):
         ...,
         description="Unique TOP identifier for the entity"
     )
-    name: str = Field(
+    entity_name: str = Field(
         ...,
         description="Primary name of the entity"
     )

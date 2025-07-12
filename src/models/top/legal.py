@@ -30,7 +30,7 @@ class LegalDocument(TOPEntity):
         ...,
         description="Official title of the document"
     )
-    summary: Optional[str] = Field(
+    document_summary: Optional[str] = Field(
         None,
         description="Brief summary of the document's purpose and content"
     )

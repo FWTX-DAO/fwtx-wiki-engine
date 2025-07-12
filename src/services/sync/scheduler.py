@@ -14,6 +14,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from src.services.graphiti.index import graphiti
 from src.services.sync.fort_worth_data import FortWorthDataSync
+from src.services.sync.data_loader import DataLoader
 from src.services.agent.researcher import FortWorthResearchWorkflow
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,7 @@ class DataSyncScheduler:
     def __init__(self):
         self.scheduler = AsyncIOScheduler()
         self.sync_service = FortWorthDataSync(graphiti)
+        self.data_loader = DataLoader(graphiti)
         self.research_workflow = FortWorthResearchWorkflow(graphiti)
         self.is_running = False
         
@@ -81,16 +83,8 @@ class DataSyncScheduler:
         """Run daily incremental sync with live data."""
         logger.info("Starting daily live data sync...")
         try:
-            # Fetch live data configurations
-            fetch_tasks = await self.sync_service.run_live_data_fetch()
-            
-            # Process all tasks with research workflow
-            episodes = await self.research_workflow.research_all_tasks(fetch_tasks)
-            
-            # Add episodes to graph
-            if episodes:
-                await self.graphiti.add_episode_bulk(episodes)
-                logger.info(f"Added {len(episodes)} episodes from research")
+            # Use data loader to sync from all sources
+            await self.data_loader.sync_to_graphiti()
                     
             logger.info("Daily sync completed successfully")
         except Exception as e:

@@ -11,7 +11,7 @@ import json
 import logging
 
 from agno.agent import Agent, RunResponse
-from agno.models.google import Gemini
+from agno.models.openai import OpenAI
 from agno.team.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
@@ -27,55 +27,45 @@ logger = logging.getLogger(__name__)
 # Import settings to get model configurations
 from src.config import settings
 
-# Log Gemini configuration
-logger.info(f"Using Gemini models: {settings.GEMINI_MODEL} (base) and {settings.GEMINI_PRO_MODEL} (pro)")
-if settings.GOOGLE_GENAI_USE_VERTEXAI:
-    logger.info(f"Using Vertex AI with project: {settings.GOOGLE_CLOUD_PROJECT}, location: {settings.GOOGLE_CLOUD_LOCATION}")
-elif settings.GOOGLE_API_KEY:
-    logger.info("Google AI Studio authentication configured")
+# Log OpenAI configuration
+logger.info(f"Using OpenAI model: {settings.OPENAI_MODEL}")
+if settings.OPENAI_API_KEY:
+    logger.info("OpenAI API authentication configured")
 else:
-    logger.warning("No GOOGLE_API_KEY found - Gemini models will not work")
+    logger.warning("No OPENAI_API_KEY found - OpenAI models will not work")
 
-# Helper function to create Gemini model with appropriate configuration
-def create_gemini_model(model_id: str, **kwargs):
-    """Create a Gemini model with Vertex AI support if configured."""
-    if settings.GOOGLE_GENAI_USE_VERTEXAI:
-        return Gemini(
-            id=model_id,
-            vertexai=True,
-            project_id=settings.GOOGLE_CLOUD_PROJECT,
-            location=settings.GOOGLE_CLOUD_LOCATION,
-            **kwargs
-        )
-    else:
-        return Gemini(id=model_id, **kwargs)
+# Helper function to create OpenAI model
+def create_openai_model(model_id: str, **kwargs):
+    """Create an OpenAI model."""
+    return OpenAI(
+        id=model_id,
+        api_key=settings.OPENAI_API_KEY,
+        base_url=settings.OPENAI_API_BASE,
+        **kwargs
+    )
 
 # Define specialized agents for different research tasks
-# Web researcher uses Gemini with grounding for accurate, up-to-date information
+# Web researcher uses OpenAI for accurate, up-to-date information
 web_researcher = Agent(
     name="Web Research Agent",
     role="Research Fort Worth government websites and official sources",
-    model=create_gemini_model(
-        settings.GEMINI_MODEL,
-        grounding=True,  # Enable grounding for factual accuracy
-        search=True,     # Enable search for latest information
-    ),
+    model=create_openai_model(settings.OPENAI_MODEL),
     tools=[DuckDuckGoTools()],
     instructions=[
         "Focus on official Fort Worth government websites (.gov domains)",
         "Always include source URLs and dates",
         "Verify information from multiple sources when possible",
         "Extract structured data according to Texas Ontology Protocol (TOP)",
-        "Use grounding to ensure factual accuracy of government data",
+        "Ensure factual accuracy of government data",
     ],
     add_datetime_to_instructions=True,
-    show_tool_calls=True,  # Show grounding/search results
+    show_tool_calls=True,
 )
 
 data_structurer = Agent(
     name="Data Structure Agent", 
     role="Structure raw data into Texas Ontology Protocol compliant format",
-    model=create_gemini_model(settings.GEMINI_MODEL),
+    model=create_openai_model(settings.OPENAI_MODEL),
     instructions=[
         "Convert unstructured data into TOP-compliant JSON format",
         "Use appropriate entity types: HomeRuleCity, Mayor, Department, etc.",
@@ -89,39 +79,33 @@ data_structurer = Agent(
 county_analyst = Agent(
     name="County Integration Analyst",
     role="Analyze Fort Worth's relationship with Tarrant County and Texas state structure",
-    model=create_gemini_model(
-        settings.GEMINI_PRO_MODEL,
-        grounding=True,  # Enable grounding for accurate jurisdictional data
-    ),
+    model=create_openai_model(settings.OPENAI_MODEL),
     tools=[DuckDuckGoTools()],
     instructions=[
         "Research Fort Worth's position within Tarrant County",
         "Identify overlapping jurisdictions and shared services",
         "Analyze intergovernmental agreements",
         "Map relationships between city, county, and state entities",
-        "Use grounding to verify jurisdictional boundaries and legal structures",
+        "Verify jurisdictional boundaries and legal structures",
     ],
     add_datetime_to_instructions=True,
     show_tool_calls=True,
 )
 
-# Create the research team with enhanced Gemini Pro model
+# Create the research team with OpenAI model
 fort_worth_research_team = Team(
     name="Fort Worth Municipal Research Team",
     mode="coordinate",
-    model=create_gemini_model(
-        settings.GEMINI_PRO_MODEL,
-        grounding=True,  # Enable grounding for team coordination
-    ),
+    model=create_openai_model(settings.OPENAI_MODEL),
     members=[web_researcher, data_structurer, county_analyst],
     tools=[ReasoningTools(add_instructions=True)],
     instructions=[
         "Collaborate to research comprehensive Fort Worth municipal data",
         "Ensure all data follows Texas Ontology Protocol (TOP) standards",
-        "Cross-verify information between team members using grounded facts",
+        "Cross-verify information between team members",
         "Output structured JSON data ready for knowledge graph ingestion",
         "Include confidence levels and source citations for all data points",
-        "Prioritize official government sources and verify through grounding",
+        "Prioritize official government sources",
     ],
     markdown=True,
     show_members_responses=True,
@@ -227,7 +211,7 @@ Please research the following information about Fort Worth, Texas municipal gove
         if 'fetch_url' in config:
             prompt += f"Primary source to check: {config['fetch_url']}\n\n"
         
-        # Add output format requirements
+        # Add structured output format requirements
         prompt += """Output Requirements:
 1. Structure all findings as JSON following Texas Ontology Protocol (TOP)
 2. Use appropriate entity types (HomeRuleCity, Mayor, Department, etc.)
@@ -235,32 +219,38 @@ Please research the following information about Fort Worth, Texas municipal gove
 4. Add source URLs and confidence levels for each data point
 5. Separate entities and relationships
 
-Example entity format:
+IMPORTANT: Return your results in the following JSON structure:
 {
-    "entity_type": "Mayor",
-    "top_id": "mayor-fort-worth-2024",
-    "name": "Mayor Name",
-    "properties": {
-        "term_start": "2021-06-01",
-        "term_end": "2025-05-31",
-        "election_type": "at-large"
-    },
-    "source": "https://fortworthtexas.gov/mayor",
-    "confidence": "high",
-    "valid_from": "2021-06-01"
+    "entities": [
+        {
+            "entity_type": "Mayor",
+            "top_id": "mayor-fort-worth-2024",
+            "properties": {
+                "entity_name": "Mayor Name",
+                "term_start": "2021-06-01",
+                "term_end": "2025-05-31",
+                "election_type": "at-large"
+            },
+            "source": "https://fortworthtexas.gov/mayor",
+            "confidence": "high",
+            "valid_from": "2021-06-01"
+        }
+    ],
+    "relationships": [
+        {
+            "relationship_type": "HoldsPosition",
+            "source_entity": "person-name",
+            "target_entity": "mayor-position",
+            "properties": {
+                "start_date": "2021-06-01"
+            },
+            "source": "URL",
+            "confidence": "high"
+        }
+    ]
 }
 
-Example relationship format:
-{
-    "relationship_type": "HoldsPosition",
-    "source_entity": "person-name",
-    "target_entity": "mayor-position",
-    "properties": {
-        "start_date": "2021-06-01"
-    },
-    "source": "URL",
-    "confidence": "high"
-}
+Ensure all data is properly structured and validated according to TOP specifications.
 """
         
         return prompt
@@ -311,7 +301,8 @@ Example relationship format:
         """Create a Graphiti episode from structured data."""
         if 'entity_type' in data:
             # It's an entity
-            episode_name = f"{data['entity_type']} - {data.get('name', 'Unknown')}"
+            entity_name = data.get('properties', {}).get('entity_name', 'Unknown')
+            episode_name = f"{data['entity_type']} - {entity_name}"
             return RawEpisode(
                 name=episode_name,
                 content=json.dumps(data),

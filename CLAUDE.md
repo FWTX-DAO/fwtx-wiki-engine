@@ -34,6 +34,8 @@ Copy `.env.example` to `.env` and configure:
 - `ENABLE_SYNC_SCHEDULER` (set to "true" for automated data sync)
 - `SYNC_INTERVAL_HOURS` (how often to sync data, default 24)
 - Gemini model settings (GEMINI_MODEL, GEMINI_PRO_MODEL, GEMINI_EMBEDDING_MODEL)
+- `LOAD_INITIAL_DATA` (set to "true" to load initial structured data)
+- `SYNC_MODE` ("initial" for JSON data or "live" for AI research)
 
 ## Architecture Overview
 
