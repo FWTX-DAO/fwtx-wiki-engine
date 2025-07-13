@@ -49,33 +49,32 @@ async def reset_database():
 
 async def initialize_with_top():
     """Initialize the database with TOP structure."""
-    from src.services.graphiti.index import graphiti, init
-    from src.services.sync.data_loader import DataLoader
+    from src.services.graphiti.index import init
+    from src.config import settings
     
     logger.info("Initializing database with TOP structure...")
     
+    # Determine sync mode from config
+    sync_mode = settings.SYNC_MODE
+    load_initial_data = settings.LOAD_INITIAL_DATA
+    
+    logger.info(f"Configuration:")
+    logger.info(f"  - OpenAI Model: {settings.OPENAI_MODEL}")
+    logger.info(f"  - Load Initial Data: {load_initial_data}")
+    logger.info(f"  - Sync Mode: {sync_mode}")
+    logger.info(f"  - AI Agent Enabled: {settings.SYNC_USE_AI_AGENT}")
+    
     try:
-        # Initialize Graphiti with new indices
-        await graphiti.build_indices_and_constraints()
-        logger.info("Built new indices and constraints")
-        
-        # Add initial TOP ontology episode
-        from src.models.ontology import add_episode as add_ontology_episode
-        await add_ontology_episode(graphiti, episode_type="general")
-        logger.info("Added TOP ontology episode")
-        
-        # Load data from all sources using DataLoader
-        logger.info("Loading Fort Worth data from local files and AI research...")
-        loader = DataLoader(graphiti)
-        await loader.sync_to_graphiti()
-        logger.info("All data loaded successfully")
+        # Initialize with data loading based on configuration
+        await init(
+            load_initial_data_flag=load_initial_data,
+            sync_mode=sync_mode
+        )
+        logger.info("TOP structure and data initialization complete")
         
     except Exception as e:
         logger.error(f"Error during initialization: {e}")
         raise
-    finally:
-        await graphiti.close()
-        logger.info("Initialization complete")
 
 
 async def main():

@@ -1,13 +1,11 @@
 import asyncio
-import json
 import logging
 import os
-from datetime import datetime, timezone
 from logging import INFO
 
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -52,9 +50,14 @@ async def lifespan(app: FastAPI):
         load_initial_data = os.getenv("LOAD_INITIAL_DATA", "false").lower() == "true"
         sync_mode = os.getenv("SYNC_MODE", "initial")  # 'initial' or 'live'
         
+        logger.info(f"LOAD_INITIAL_DATA: {load_initial_data}, SYNC_MODE: {sync_mode}")
+        
         # Run initialization in a background task to not block startup
         asyncio.create_task(initialize_graphiti(load_initial_data, sync_mode))
-        logger.info(f"Graphiti initialization started in background (mode: {sync_mode})")
+        if load_initial_data:
+            logger.info(f"Graphiti initialization started in background (mode: {sync_mode})")
+        else:
+            logger.info("Graphiti initialization started (basic setup only - set LOAD_INITIAL_DATA=true to load data)")
     except Exception as e:
         logger.error(f"Failed to start Graphiti initialization: {e}")
     

@@ -62,7 +62,20 @@ from .relationships import (
     ElectedTo,
     SupersededBy,
     PartOf,
-    ReportsTo
+    ReportsTo,
+    Serves
+)
+
+from .structured import (
+    TOPEpisodeData,
+    StructuredEntity,
+    StructuredRelationship,
+    ResearchOutput,
+    MayorData,
+    DepartmentData,
+    CouncilMemberData,
+    TOPEntityType,
+    TOPRelationshipType
 )
 
 __all__ = [
@@ -118,5 +131,17 @@ __all__ = [
     'ElectedTo',
     'SupersededBy',
     'PartOf',
-    'ReportsTo'
+    'ReportsTo',
+    'Serves',
+    
+    # Structured output models
+    'TOPEpisodeData',
+    'StructuredEntity',
+    'StructuredRelationship',
+    'ResearchOutput',
+    'MayorData',
+    'DepartmentData',
+    'CouncilMemberData',
+    'TOPEntityType',
+    'TOPRelationshipType'
 ]

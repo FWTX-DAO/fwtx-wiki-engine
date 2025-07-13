@@ -5,7 +5,7 @@ API endpoints for AI research operations.
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.middleware.auth import get_api_key
-from src.services.agent.researcher import research_fort_worth_topic, FortWorthResearchWorkflow
+from src.services.agent.researcher import FortWorthResearchWorkflow
 from src.services.graphiti.index import graphiti
 from src.models.research import ResearchRequest, ResearchResponse
 

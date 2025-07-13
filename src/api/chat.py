@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
 
 from src.middleware.auth import get_api_key
 from src.models.chat import ChatRequest, ChatResponse

@@ -21,6 +21,17 @@ from agno.workflow import Workflow
 from graphiti_core.nodes import EpisodeType
 from graphiti_core.utils.bulk_utils import RawEpisode
 
+# Import structured output models
+from src.models.top.structured import (
+    TOPEpisodeData,
+    StructuredEntity,
+    StructuredRelationship,
+    ResearchOutput,
+    MayorData,
+    DepartmentData,
+    CouncilMemberData
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -58,6 +69,8 @@ web_researcher = Agent(
     ],
     add_datetime_to_instructions=True,
     show_tool_calls=True,
+    # Enable structured output when researching specific entity types
+    response_model=None  # Will be set dynamically based on task
 )
 
 data_structurer = Agent(
@@ -70,8 +83,12 @@ data_structurer = Agent(
         "Include temporal data (valid_from, valid_until) for all entities",
         "Add source attribution with confidence levels",
         "Ensure all required fields are populated",
+        "Follow the exact structure of TOPEpisodeData model",
     ],
     add_datetime_to_instructions=True,
+    # Use structured output for data structuring
+    response_model=TOPEpisodeData,
+    use_json_mode=True
 )
 
 county_analyst = Agent(
@@ -158,23 +175,34 @@ class FortWorthResearchWorkflow(Workflow):
         logger.info(f"Starting research for '{task_name}'")
         
         # Run the team research
-        yield from self.team.run(prompt, stream=True)
+        logger.info(f"Running team research with prompt (first 200 chars): {prompt[:200]}...")
+        
+        try:
+            yield from self.team.run(prompt, stream=True)
+        except Exception as e:
+            logger.error(f"Team research failed: {e}", exc_info=True)
+            raise
         
         # Cache the results if enabled
         if self.cache_enabled and self.team.run_response:
+            logger.info(f"Caching results for '{task_name}'")
             self.research_cache[task_name] = {
                 'content': self.team.run_response.content,
                 'timestamp': datetime.now()
             }
             
             # Process and structure the results
+            logger.info("Processing research results...")
             episodes = self._process_research_results(
                 self.team.run_response.content,
                 task_name
             )
+            logger.info(f"Created {len(episodes)} episodes from research")
             
             # Store in session state for later use
             self.session_state[f"{task_name}_episodes"] = episodes
+        else:
+            logger.warning(f"No response to cache for '{task_name}'")
     
     def _build_research_prompt(self, research_task: Dict[str, Any]) -> str:
         """Build detailed research prompt from task configuration."""
@@ -212,41 +240,77 @@ Please research the following information about Fort Worth, Texas municipal gove
         # Add structured output format requirements
         prompt += """Output Requirements:
 1. Structure all findings as JSON following Texas Ontology Protocol (TOP)
-2. Use appropriate entity types (HomeRuleCity, Mayor, Department, etc.)
+2. Use appropriate entity types:
+   - Government: HomeRuleCity, Department, Division, Committee
+   - Political: Mayor, CouncilMember, CityManager, AppointedPosition, ElectedPosition
+   - Legal: Charter, Ordinance, Resolution, Policy
+   - Geographic: CouncilDistrict, Precinct, VotingLocation
+   - Person: for individuals holding positions
 3. Include temporal data (valid_from, valid_until) where applicable
 4. Add source URLs and confidence levels for each data point
-5. Separate entities and relationships
+5. Use proper TOP IDs format: "fwtx:type:identifier" (e.g., "fwtx:mayor:current", "fwtx:dept:police")
+6. Separate entities and relationships
 
 IMPORTANT: Return your results in the following JSON structure:
 {
     "entities": [
         {
             "entity_type": "Mayor",
-            "top_id": "mayor-fort-worth-2024",
+            "top_id": "fwtx:mayor:current",
             "properties": {
-                "entity_name": "Mayor Name",
+                "entity_name": "Mayor Mattie Parker",
+                "person_name": "Mattie Parker",
                 "term_start": "2021-06-01",
                 "term_end": "2025-05-31",
-                "election_type": "at-large"
+                "election_type": "at-large",
+                "political_party": "Republican"
             },
             "source": "https://fortworthtexas.gov/mayor",
             "confidence": "high",
             "valid_from": "2021-06-01"
+        },
+        {
+            "entity_type": "Department",
+            "top_id": "fwtx:dept:police",
+            "properties": {
+                "entity_name": "Fort Worth Police Department",
+                "department_type": "public_safety",
+                "chief": "Neil Noakes",
+                "budget_fy2024": 328000000,
+                "employee_count": 1700,
+                "parent_organization": "fwtx:city:fort-worth"
+            },
+            "source": "https://fortworthpd.com",
+            "confidence": "high",
+            "valid_from": "1873-01-01"
         }
     ],
     "relationships": [
         {
-            "relationship_type": "HoldsPosition",
-            "source_entity": "person-name",
-            "target_entity": "mayor-position",
+            "relationship_type": "Governs",
+            "source_entity": "fwtx:mayor:current",
+            "target_entity": "fwtx:city:fort-worth",
             "properties": {
-                "start_date": "2021-06-01"
+                "start_date": "2021-06-01",
+                "election_date": "2021-05-01"
             },
-            "source": "URL",
+            "source": "https://fortworthtexas.gov/mayor",
+            "confidence": "high"
+        },
+        {
+            "relationship_type": "PartOf",
+            "source_entity": "fwtx:dept:police",
+            "target_entity": "fwtx:city:fort-worth",
+            "properties": {
+                "relationship_type": "administrative"
+            },
+            "source": "https://fortworthpd.com",
             "confidence": "high"
         }
     ]
 }
+
+Valid relationship types: Governs, HasJurisdictionOver, HoldsPosition, AppointedBy, ElectedTo, SupersededBy, PartOf, ReportsTo, Serves
 
 Ensure all data is properly structured and validated according to TOP specifications.
 """
@@ -268,7 +332,26 @@ Ensure all data is properly structured and validated according to TOP specificat
                 for json_str in json_matches:
                     try:
                         data = json.loads(json_str)
-                        if isinstance(data, list):
+                        
+                        # Try to parse as TOPEpisodeData
+                        if 'entities' in data and 'relationships' in data:
+                            episode_data = TOPEpisodeData(**data)
+                            
+                            # Validate entity references
+                            missing_ids = episode_data.validate_entity_references()
+                            if missing_ids:
+                                logger.warning(f"Missing entity references: {missing_ids}")
+                            
+                            # Create episode from structured data
+                            episodes.append(RawEpisode(
+                                name=f"{task_name} - Structured Data",
+                                content=episode_data.to_episode_content(),
+                                source=EpisodeType.json,
+                                source_description=f"AI researched - {task_name}",
+                                reference_time=datetime.now()
+                            ))
+                        elif isinstance(data, list):
+                            # Legacy format support
                             for item in data:
                                 episode = self._create_episode_from_data(item, task_name)
                                 if episode:
@@ -279,6 +362,8 @@ Ensure all data is properly structured and validated according to TOP specificat
                                 episodes.append(episode)
                     except json.JSONDecodeError:
                         logger.warning(f"Failed to parse JSON from research results")
+                    except Exception as e:
+                        logger.warning(f"Failed to parse structured data: {e}")
             
             # If no JSON found, create a text episode with the full content
             if not episodes:
@@ -298,26 +383,53 @@ Ensure all data is properly structured and validated according to TOP specificat
     def _create_episode_from_data(self, data: Dict[str, Any], task_name: str) -> RawEpisode:
         """Create a Graphiti episode from structured data."""
         if 'entity_type' in data:
-            # It's an entity
-            entity_name = data.get('properties', {}).get('entity_name', 'Unknown')
-            episode_name = f"{data['entity_type']} - {entity_name}"
-            return RawEpisode(
-                name=episode_name,
-                content=json.dumps(data),
-                source=EpisodeType.json,
-                source_description=f"AI researched - {task_name}",
-                reference_time=datetime.now()
-            )
+            # Try to create a StructuredEntity for validation
+            try:
+                entity = StructuredEntity(**data)
+                entity_name = entity.properties.get('entity_name', 'Unknown')
+                episode_name = f"{entity.entity_type} - {entity_name}"
+                return RawEpisode(
+                    name=episode_name,
+                    content=entity.model_dump_json(indent=2),
+                    source=EpisodeType.json,
+                    source_description=f"AI researched - {task_name}",
+                    reference_time=datetime.now()
+                )
+            except Exception as e:
+                logger.warning(f"Entity validation failed: {e}")
+                # Fall back to raw data
+                entity_name = data.get('properties', {}).get('entity_name', 'Unknown')
+                episode_name = f"{data['entity_type']} - {entity_name}"
+                return RawEpisode(
+                    name=episode_name,
+                    content=json.dumps(data),
+                    source=EpisodeType.json,
+                    source_description=f"AI researched - {task_name}",
+                    reference_time=datetime.now()
+                )
         elif 'relationship_type' in data:
-            # It's a relationship
-            episode_name = f"Relationship - {data['relationship_type']}"
-            return RawEpisode(
-                name=episode_name,
-                content=json.dumps(data),
-                source=EpisodeType.json,
-                source_description=f"AI researched relationship - {task_name}",
-                reference_time=datetime.now()
-            )
+            # Try to create a StructuredRelationship for validation
+            try:
+                rel = StructuredRelationship(**data)
+                episode_name = f"Relationship - {rel.relationship_type}"
+                return RawEpisode(
+                    name=episode_name,
+                    content=rel.model_dump_json(indent=2),
+                    source=EpisodeType.json,
+                    source_description=f"AI researched relationship - {task_name}",
+                    reference_time=datetime.now()
+                )
+            except Exception as e:
+                logger.warning(f"Relationship validation failed: {e}")
+                # Fall back to raw data
+                episode_name = f"Relationship - {data['relationship_type']}"
+                return RawEpisode(
+                    name=episode_name,
+                    content=json.dumps(data),
+                    source=EpisodeType.json,
+                    source_description=f"AI researched relationship - {task_name}",
+                    reference_time=datetime.now()
+                )
         return None
     
     async def research_all_tasks(self, tasks: List[Dict[str, Any]]) -> List[RawEpisode]:

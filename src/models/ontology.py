@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional, List, Dict, Any, Type
+from typing import Dict, Any, Type
 
 # Import Texas Ontology Protocol (TOP) entities and relationships
 from .top import (
@@ -56,13 +56,23 @@ from .top import (
     ElectedTo,
     SupersededBy,
     PartOf,
-    ReportsTo
+    ReportsTo,
+    Serves
 )
 
 # No legacy entities - using only TOP entities
 
+# Create a simple Person entity for TOP
+class Person(BaseModel):
+    """Simple person entity for holding positions."""
+    entity_name: str
+    entity_type: str = "person"
+
 # TOP entity types only
 entity_types: Dict[str, Type[BaseModel]] = {
+    # Basic entities
+    "Person": Person,
+    
     # TOP Government entities
     "GovernmentEntity": GovernmentEntity,
     "Municipality": Municipality,
@@ -112,6 +122,7 @@ edge_types: Dict[str, Type[BaseModel]] = {
     "SupersededBy": SupersededBy,
     "PartOf": PartOf,
     "ReportsTo": ReportsTo,
+    "Serves": Serves,
 }
 
 # TOP edge type map
@@ -126,6 +137,8 @@ edge_type_map = {
     ("Person", "ElectedPosition"): ["HoldsPosition", "ElectedTo"],
     ("Person", "AppointedPosition"): ["HoldsPosition", "AppointedBy"],
     ("Person", "Person"): ["AppointedBy", "ReportsTo"],
+    ("CouncilMember", "CouncilDistrict"): ["Serves"],
+    ("Mayor", "HomeRuleCity"): ["Governs"],
     
     # TOP Legal relationships
     ("LegalDocument", "LegalDocument"): ["SupersededBy", "AmendedBy"],

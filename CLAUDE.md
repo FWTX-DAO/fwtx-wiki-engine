@@ -60,6 +60,9 @@ Copy `.env.example` to `.env` and configure:
 - `src/config.py`: Pydantic-based configuration management
 - `src/data/`: Static data files (fwtx.json with service URLs, governance.md with government structure)
 - `client/`: Web UI with graph visualization and chat
+- `scripts/`: Utility scripts for development and maintenance
+- `tests/`: Test files for TOP implementation and functionality
+- `examples/`: Example code demonstrating structured output usage
 - `wiki.py`: Main application entry point
 
 ### Key Design Patterns

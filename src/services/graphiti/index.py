@@ -1,15 +1,10 @@
 import logging
 from graphiti_core import Graphiti
-from graphiti_core.nodes import EpisodeType
-from graphiti_core.search.search_config_recipes import NODE_HYBRID_SEARCH_RRF
-from graphiti_core.utils.bulk_utils import RawEpisode
-from graphiti_core.llm_client.openai_client import OpenAIClient
-from graphiti_core.embedder import OpenAIEmbedder
 from src.db.falkor import falkor_driver
-from src.models.ontology import add_episode as add_ontology_episode, entity_types, edge_types, edge_type_map
+from src.models.ontology import add_episode as add_ontology_episode
 from src.services.sync.fort_worth_data import initialize_live_research
 from src.services.graphiti.initial_sync import load_initial_data
-from src.services.graphiti.search_config import TOPSearchConfig, TOPSearchQueries, top_search
+from src.services.graphiti.search_config import top_search
 from src.config import settings
 
 logger = logging.getLogger(__name__)
@@ -83,11 +78,7 @@ async def query_knowledge_graph(
             entity_category=entity_category
         )
     else:
-        results = await graphiti.search(
-            query,
-            entity_types=entity_types,
-            edge_types=edge_types
-        )
+        results = await graphiti.search(query)
 
     # Log search results
     logger.info(f'Found {len(results)} results')

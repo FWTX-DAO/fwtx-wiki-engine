@@ -14,7 +14,8 @@ from apscheduler.triggers.cron import CronTrigger
 
 from src.services.graphiti.index import graphiti
 from src.services.sync.fort_worth_data import FortWorthDataSync
-from src.services.sync.data_loader import DataLoader
+from src.services.sync.data_loader import DataLoader, load_and_sync_all_data
+from src.services.sync.top_loader import TOPDataLoader
 from src.services.agent.researcher import FortWorthResearchWorkflow
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,6 @@ class DataSyncScheduler:
     def __init__(self):
         self.scheduler = AsyncIOScheduler()
         self.sync_service = FortWorthDataSync(graphiti)
-        self.data_loader = DataLoader(graphiti)
         self.research_workflow = FortWorthResearchWorkflow(graphiti)
         self.is_running = False
         
@@ -83,8 +83,12 @@ class DataSyncScheduler:
         """Run daily incremental sync with live data."""
         logger.info("Starting daily live data sync...")
         try:
-            # Use data loader to sync from all sources
-            await self.data_loader.sync_to_graphiti()
+            # First ensure TOP base data is present
+            top_loader = TOPDataLoader(graphiti)
+            await top_loader.sync_to_graphiti()
+            
+            # Then sync from all sources
+            await load_and_sync_all_data(graphiti)
                     
             logger.info("Daily sync completed successfully")
         except Exception as e:
@@ -158,14 +162,14 @@ class DataSyncScheduler:
         
         try:
             if sync_type == "full":
-                await self.sync_service.run_full_sync()
+                await self._run_weekly_full_sync()
             elif sync_type == "services":
-                await self.sync_service.sync_from_fwtx_json()
+                await load_and_sync_all_data(graphiti)
             elif sync_type == "governance":
-                await self.sync_service.sync_governance_structure()
+                await load_and_sync_all_data(graphiti)
             else:
                 # Default incremental sync
-                await self.sync_service.sync_from_fwtx_json()
+                await load_and_sync_all_data(graphiti)
                 
             logger.info(f"Manual {sync_type} sync completed")
             return {"status": "success", "sync_type": sync_type, "timestamp": datetime.now().isoformat()}

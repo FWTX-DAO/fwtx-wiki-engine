@@ -6,17 +6,18 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "falkordb>=1.2.0",
-    "fastapi>=0.115.14",
-    "graphiti-core>=0.15.0",
+    "fastapi>=0.116.0",
+    "graphiti-core>=0.17.1",
     "pydantic-settings>=2.10.1",
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
-    "uvicorn[standard]>=0.30.0",
-    "apscheduler>=3.10.4",
-    "agno>=1.7.1",
+    "uvicorn[standard]>=0.35.0",
+    "apscheduler>=3.11.0",
+    "agno>=1.7.2",
     "anthropic>=0.57.1",
     "duckduckgo-search>=8.1.1",
-    "pypdf2>=3.0.0",
+    "pypdf2>=3.0.1",
     "openai>=1.93.0",
-    "google-genai>=0.6.0",
+    "google-genai>=1.15.0",
 ]
+

@@ -13,6 +13,14 @@ from typing import List, Dict, Any, Optional
 from graphiti_core.nodes import EpisodeType
 from graphiti_core.utils.bulk_utils import RawEpisode
 
+from src.models.top.structured import (
+    TOPEpisodeData,
+    StructuredEntity,
+    StructuredRelationship,
+    TOPEntityType,
+    TOPRelationshipType
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -225,6 +233,12 @@ class FortWorthDataSync:
 async def initialize_live_research(graphiti):
     """Initialize live research tasks for Fort Worth data."""
     from src.services.agent.researcher import FortWorthResearchWorkflow
+    from src.services.sync.top_loader import TOPDataLoader
+    
+    # First ensure TOP base data exists
+    logger.info("Ensuring TOP-compliant base data...")
+    top_loader = TOPDataLoader(graphiti)
+    await top_loader.sync_to_graphiti()
     
     sync_service = FortWorthDataSync(graphiti)
     research_workflow = FortWorthResearchWorkflow(graphiti)
@@ -240,10 +254,18 @@ async def initialize_live_research(graphiti):
         logger.info(f"  - {task['name']}")
     
     # Create initial research episodes using the workflow
-    initial_episodes = await research_workflow.research_all_tasks(fetch_tasks)
-    
-    if initial_episodes:
-        await graphiti.add_episode_bulk(initial_episodes)
-        logger.info(f"Created {len(initial_episodes)} initial research task episodes")
+    logger.info("Starting research for all tasks...")
+    try:
+        initial_episodes = await research_workflow.research_all_tasks(fetch_tasks)
+        
+        if initial_episodes:
+            logger.info(f"Research completed - adding {len(initial_episodes)} episodes to graph")
+            await graphiti.add_episode_bulk(initial_episodes)
+            logger.info(f"Successfully added {len(initial_episodes)} research episodes")
+        else:
+            logger.warning("No episodes created from research")
+    except Exception as e:
+        logger.error(f"Research workflow failed: {e}", exc_info=True)
+        raise
     
     return fetch_tasks

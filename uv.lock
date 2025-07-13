@@ -3,7 +3,7 @@ requires-python = ">=3.13"
 
 [[package]]
 name = "agno"
-version = "1.7.1"
+version = "1.7.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docstring-parser" },
@@ -19,9 +19,9 @@ dependencies = [
     { name = "typer" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/95/ba/322c85c37841342e45ea6d57a6113597487946cfbdb35d414c3a87a920c3/agno-1.7.1.tar.gz", hash = "sha256:23d1065ed31989479541813a1311ceb368ebd3e6a5be03c79723b4a1aecaf476", size = 659253 }
+sdist = { url = "https://files.pythonhosted.org/packages/50/64/6a82d2375145fd733009db0ada531b595fc2f3c1712ac91c91b2e5fcf02f/agno-1.7.2.tar.gz", hash = "sha256:f4f97e5ea1f9c0781d9bb8396862c82671381386c1569cdb456d70f6c8d3a108", size = 661788 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8f/5c/9e61844d8cd5962d16ab69484dc451a49c911385f630ae6b253dc7991a28/agno-1.7.1-py3-none-any.whl", hash = "sha256:068db72a8db99ece518c18f7fdf21e708f27b203606cf414fa76094307dae183", size = 881007 },
+    { url = "https://files.pythonhosted.org/packages/7d/24/884cbd1133e3b9985d53733250251098caead365bb8706af8da105813abe/agno-1.7.2-py3-none-any.whl", hash = "sha256:37a1985e67762f0d8016318ba5d8b8697c855827d7c86b21a41cdff088294cc2", size = 888229 },
 ]
 
 [[package]]
@@ -202,16 +202,16 @@ wheels = [
 
 [[package]]
 name = "fastapi"
-version = "0.115.14"
+version = "0.116.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/53/8c38a874844a8b0fa10dd8adf3836ac154082cf88d3f22b544e9ceea0a15/fastapi-0.115.14.tar.gz", hash = "sha256:b1de15cdc1c499a4da47914db35d0e4ef8f1ce62b624e94e0e5824421df99739", size = 296263 }
+sdist = { url = "https://files.pythonhosted.org/packages/78/d7/6c8b3bfe33eeffa208183ec037fee0cce9f7f024089ab1c5d12ef04bd27c/fastapi-0.116.1.tar.gz", hash = "sha256:ed52cbf946abfd70c5a0dccb24673f0670deeb517a88b3544d03c2a6bf283143", size = 296485 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/50/b1222562c6d270fea83e9c9075b8e8600b8479150a18e4516a6138b980d1/fastapi-0.115.14-py3-none-any.whl", hash = "sha256:6c0c8bf9420bd58f565e585036d971872472b4f7d3f6c73b698e10cffdefb3ca", size = 95514 },
+    { url = "https://files.pythonhosted.org/packages/e5/47/d63c60f59a59467fda0f93f46335c9d18526d7071f025cb5b89d5353ea42/fastapi-0.116.1-py3-none-any.whl", hash = "sha256:c46ac7c312df840f0c9e220f7964bada936781bc4e2e6eb71f1c4d7553786565", size = 95631 },
 ]
 
 [[package]]
@@ -237,20 +237,20 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "agno", specifier = ">=1.7.1" },
+    { name = "agno", specifier = ">=1.7.2" },
     { name = "anthropic", specifier = ">=0.57.1" },
-    { name = "apscheduler", specifier = ">=3.10.4" },
+    { name = "apscheduler", specifier = ">=3.11.0" },
     { name = "duckduckgo-search", specifier = ">=8.1.1" },
     { name = "falkordb", specifier = ">=1.2.0" },
-    { name = "fastapi", specifier = ">=0.115.14" },
-    { name = "google-genai", specifier = ">=0.6.0" },
-    { name = "graphiti-core", specifier = ">=0.15.0" },
+    { name = "fastapi", specifier = ">=0.116.0" },
+    { name = "google-genai", specifier = ">=1.15.0" },
+    { name = "graphiti-core", specifier = ">=0.17.1" },
     { name = "openai", specifier = ">=1.93.0" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
-    { name = "pypdf2", specifier = ">=3.0.0" },
+    { name = "pypdf2", specifier = ">=3.0.1" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
-    { name = "uvicorn", extras = ["standard"], specifier = ">=0.30.0" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.35.0" },
 ]
 
 [[package]]
@@ -311,7 +311,7 @@ wheels = [
 
 [[package]]
 name = "graphiti-core"
-version = "0.15.0"
+version = "0.17.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "diskcache" },
@@ -323,9 +323,9 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "tenacity" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/da/c6/92da04ebeff7bb0b73a6458da418bad0e3ad9958f367bf8e72f129fc0c03/graphiti_core-0.15.0.tar.gz", hash = "sha256:ef485ba9a326a22b0aa50fbe8eaa8347c24834f9ce4e540a8865a5c93a7c7ff3", size = 6447360 }
+sdist = { url = "https://files.pythonhosted.org/packages/83/75/771eb07657bf0458444460557f808a04821638bf3f06dff7778a5efaffb2/graphiti_core-0.17.1.tar.gz", hash = "sha256:4186644c144a1805581751d199ed7aedb6a48d0d86c0bf9ff7cb2ac6167ebdbd", size = 6460501 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c4/e5/830c3d06d34b73ba02721fbcab122ac818de68f0aaf3df1bbc0b9fc6f05f/graphiti_core-0.15.0-py3-none-any.whl", hash = "sha256:ec1c3b0e5d558bf271724e063c06fa5ae989cc9295da49e303fad944b3695726", size = 133973 },
+    { url = "https://files.pythonhosted.org/packages/ad/81/7aee71fed15e45c4cf30e919c9046da47734dd2fb20d00553ea20f4d1f1a/graphiti_core-0.17.1-py3-none-any.whl", hash = "sha256:7654cb86a2cb3010c816df3f8bf2de25a3adaaf824c497cb24d573047bb7e29c", size = 134718 },
 ]
 
 [[package]]

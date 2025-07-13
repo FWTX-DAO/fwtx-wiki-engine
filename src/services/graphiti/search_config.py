@@ -7,7 +7,6 @@ for searching Fort Worth municipal data.
 
 from typing import List, Optional, Dict, Any
 from graphiti_core.search.search_filters import SearchFilters
-from graphiti_core.search.search_config_recipes import NODE_HYBRID_SEARCH_RRF
 
 
 class TOPSearchConfig:

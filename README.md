@@ -127,12 +127,28 @@ To get a local copy up and running follow these simple steps.
    docker run -p 6379:6379 -p 3000:3000 -it --rm falkordb/falkordb:latest
    ```
 
-5. Run the application
+5. Initialize the knowledge graph (first time only)
+   ```sh
+   # Option 1: Load TOP-compliant base data (recommended)
+   uv run init_top_data.py
+   
+   # Option 2: Reset database and load all data
+   uv run reset_and_init.py
+   ```
+   This will:
+   - Build graph indices following Texas Ontology Protocol (TOP)
+   - Create complete Fort Worth government structure
+   - Process data from `data/` directory (JSON, PDFs, Markdown)
+   - Extract entities: City, Mayor, Council Members, Departments
+   - Create relationships: governance, representation, administration
+   - Optionally fetch live data using AI research agents
+
+6. Run the application
    ```sh
    uv run wiki.py
    ```
 
-6. Access the web interface
+7. Access the web interface
    Open your browser to http://localhost:8001
 
 ### Optional: Enable Automated Data Sync
