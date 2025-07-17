@@ -13,6 +13,14 @@ class ChatRequest(BaseModel):
     entity_category: Optional[str] = None  # Filter by TOP category
     use_custom_filter: Optional[bool] = False
     
+    # Contextual search parameters
+    context_entities: Optional[List[str]] = None  # Entity UUIDs for context
+    conversation_id: Optional[str] = None  # Conversation session ID
+    use_contextual_search: Optional[bool] = False  # Enable contextual search
+    
+    # Search limits
+    limit: Optional[int] = None  # Max results to return
+    
     @property
     def effective_query(self) -> str:
         """Return the effective query (message takes precedence)."""

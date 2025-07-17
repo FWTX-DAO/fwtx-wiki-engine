@@ -88,3 +88,70 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
+
+/* Episode cards */
+.episode-card {
+    transition: all 0.3s ease;
+}
+
+.episode-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Temporal node effects */
+.temporal-recent {
+    animation: temporal-pulse 2s ease-in-out infinite;
+}
+
+@keyframes temporal-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* FalkorDB GraphBLAS indicator */
+.graphblas-badge {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    animation: graphblas-glow 3s ease-in-out infinite;
+}
+
+@keyframes graphblas-glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+    }
+}
+
+/* Episode timeline */
+.episode-timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #4F46E5;
+    transform: translateY(-50%);
+}
+
+/* Graph performance metrics */
+.metric-card {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border: 1px solid #d1d5db;
+    transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+    transform: translateY(-1px);
+}

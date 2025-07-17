@@ -15,61 +15,27 @@ class TOPSearchConfig:
     @staticmethod
     def government_entities_filter() -> SearchFilters:
         """Filter for government entities only."""
-        return SearchFilters(
-            node_labels=[
-                "GovernmentEntity",
-                "Municipality", 
-                "HomeRuleCity",
-                "GeneralLawCity",
-                "County",
-                "Department",
-                "Division",
-                "SpecialDistrict",
-                "Authority"
-            ]
-        )
+        # Simplified to avoid FalkorDB label OR issues
+        # Will search without label filtering and rely on content matching
+        return SearchFilters()
     
     @staticmethod
     def political_positions_filter() -> SearchFilters:
         """Filter for political positions and office holders."""
-        return SearchFilters(
-            node_labels=[
-                "ElectedPosition",
-                "AppointedPosition",
-                "Mayor",
-                "CouncilMember",
-                "CityManager",
-                "CountyJudge",
-                "Commissioner"
-            ]
-        )
+        # Simplified to avoid FalkorDB label OR issues
+        return SearchFilters()
     
     @staticmethod
     def legal_documents_filter() -> SearchFilters:
         """Filter for legal documents."""
-        return SearchFilters(
-            node_labels=[
-                "LegalDocument",
-                "Ordinance",
-                "Resolution",
-                "Charter",
-                "Proclamation",
-                "ExecutiveOrder"
-            ]
-        )
+        # Simplified to avoid FalkorDB label OR issues
+        return SearchFilters()
     
     @staticmethod
     def geographic_entities_filter() -> SearchFilters:
         """Filter for geographic and boundary entities."""
-        return SearchFilters(
-            node_labels=[
-                "AdministrativeBoundary",
-                "CouncilDistrict",
-                "Precinct",
-                "VotingLocation",
-                "TexasAddress"
-            ]
-        )
+        # Simplified to avoid FalkorDB label OR issues
+        return SearchFilters()
     
     @staticmethod
     def government_relationships_filter() -> SearchFilters:
@@ -123,15 +89,16 @@ class TOPSearchQueries:
     @staticmethod
     async def search_current_officials(graphiti, include_appointed: bool = True):
         """Search for all current elected and appointed officials."""
-        labels = ["Mayor", "CouncilMember"]
+        # Use descriptive search query instead of label filtering
+        query = "current Fort Worth officials mayors council members"
         if include_appointed:
-            labels.extend(["CityManager", "AppointedPosition"])
+            query += " city manager appointed positions"
         
-        filter_config = SearchFilters(node_labels=labels)
+        # No label filtering to avoid FalkorDB issues
+        filter_config = SearchFilters()
         
         return await graphiti.search(
-            query="current Fort Worth officials mayors council members",
-            search_filter=filter_config
+            query=query
         )
     
     @staticmethod
@@ -141,11 +108,11 @@ class TOPSearchQueries:
         if dept_type:
             query += f" {dept_type}"
         
-        filter_config = SearchFilters(node_labels=["Department"])
+        # No label filtering to avoid FalkorDB issues
+        filter_config = SearchFilters()
         
         return await graphiti.search(
-            query=query,
-            search_filter=filter_config
+            query=query
         )
     
     @staticmethod
@@ -155,43 +122,34 @@ class TOPSearchQueries:
         if district_number:
             query += f" district {district_number}"
         
-        filter_config = SearchFilters(node_labels=["CouncilDistrict"])
+        # No label filtering to avoid FalkorDB issues
+        filter_config = SearchFilters()
         
         return await graphiti.search(
-            query=query,
-            search_filter=filter_config
+            query=query
         )
     
     @staticmethod
     async def search_recent_ordinances(graphiti, days: int = 30):
         """Search for recent ordinances."""
-        filter_config = SearchFilters(node_labels=["Ordinance"])
-        
         return await graphiti.search(
-            query=f"Fort Worth ordinances passed in last {days} days",
-            search_filter=filter_config
+            query=f"Fort Worth ordinances passed in last {days} days"
         )
     
     @staticmethod
     async def search_by_relationship(graphiti, relationship_type: str, entity_name: str):
         """Search based on relationship type."""
-        filter_config = SearchFilters(edge_types=[relationship_type])
-        
+        # For now, search without edge filters due to FalkorDB compatibility
         return await graphiti.search(
-            query=f"{entity_name} {relationship_type}",
-            search_filter=filter_config
+            query=f"{entity_name} {relationship_type}"
         )
     
     @staticmethod
     async def search_organizational_hierarchy(graphiti, root_entity: str = "Fort Worth"):
         """Search organizational hierarchy starting from a root entity."""
-        filter_config = SearchFilters(
-            edge_types=["PartOf", "ReportsTo", "HasJurisdictionOver"]
-        )
-        
+        # For now, search without edge filters due to FalkorDB compatibility
         return await graphiti.search(
-            query=f"{root_entity} organizational structure hierarchy",
-            search_filter=filter_config
+            query=f"{root_entity} organizational structure hierarchy"
         )
 
 
@@ -200,8 +158,7 @@ async def top_search(
     graphiti,
     query: str,
     entity_category: Optional[str] = None,
-    include_relationships: bool = True,
-    active_only: bool = True
+    limit: int = 10
 ) -> List[Any]:
     """
     Perform a search with TOP-specific filters.
@@ -210,8 +167,7 @@ async def top_search(
         graphiti: Graphiti instance
         query: Search query
         entity_category: Category to filter ('government', 'political', 'legal', 'geographic')
-        include_relationships: Whether to include relationship edges
-        active_only: Whether to filter to only active (non-superseded) entities
+        limit: Maximum number of results to return
     
     Returns:
         Search results
@@ -233,5 +189,9 @@ async def top_search(
         query=query,
         search_filter=filter_config
     )
+    
+    # Apply limit manually if specified
+    if limit and len(results) > limit:
+        results = results[:limit]
     
     return results

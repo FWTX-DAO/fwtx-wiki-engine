@@ -7,6 +7,8 @@ aligned with the Texas Ontology Protocol (TOP) strategy using AI agents.
 
 import logging
 
+from graphiti_core import Graphiti
+
 logger = logging.getLogger(__name__)
 
 
@@ -19,7 +21,9 @@ async def load_initial_data(graphiti):
     """
     from src.services.sync.data_loader import DataLoader
     from src.services.sync.top_loader import load_top_compliant_data
+    from graphiti_core.utils.maintenance.graph_data_operations import clear_data
     
+    clear_data(graphiti.driver)
     # First load TOP-compliant base data
     logger.info("Loading TOP-compliant Fort Worth data...")
     await load_top_compliant_data(graphiti)
