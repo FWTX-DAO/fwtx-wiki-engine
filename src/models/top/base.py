@@ -66,6 +66,17 @@ class TemporalMixin:
         return self.valid_until is None and self.superseded_at is None
 
 
+class TexasStatePlaneCoords(BaseModel):
+    """Texas State Plane coordinate representation."""
+    zone: str = Field(..., description="Texas State Plane zone (North, Central, South, etc.)")
+    x: float = Field(..., description="Easting coordinate in feet")
+    y: float = Field(..., description="Northing coordinate in feet")
+    epsg_code: Optional[str] = Field(None, description="EPSG code for the specific zone")
+    
+    class Config:
+        extra = "forbid"  # This ensures additionalProperties: false in JSON Schema
+
+
 class SpatialMixin:
     """
     Spatial mixin implementing TOP's geographic precision principle.
@@ -77,7 +88,7 @@ class SpatialMixin:
         None,
         description="Well-Known Text representation of geometry in EPSG:4326"
     )
-    texas_state_plane_coords: Optional[Dict[str, Any]] = Field(
+    texas_state_plane_coords: Optional[TexasStatePlaneCoords] = Field(
         None,
         description="Optional Texas State Plane coordinate representation"
     )
@@ -136,16 +147,16 @@ class TOPEntity(TemporalMixin, SourceAttributionMixin, BaseModel):
         ...,
         description="Primary name of the entity"
     )
-    aliases: List[str] = Field(
-        default_factory=list,
+    aliases: Optional[List[str]] = Field(
+        None,
         description="Alternative names or variations"
     )
     description: Optional[str] = Field(
         None,
         description="Human-readable description"
     )
-    external_ids: Dict[str, str] = Field(
-        default_factory=dict,
+    external_ids: Optional[Dict[str, str]] = Field(
+        None,
         description="Mappings to external system identifiers"
     )
     
@@ -177,8 +188,8 @@ class TOPRelationship(TemporalMixin, SourceAttributionMixin, BaseModel):
         ...,
         description="Type of relationship"
     )
-    properties: Dict[str, Any] = Field(
-        default_factory=dict,
+    properties: Optional[Dict[str, Any]] = Field(
+        None,
         description="Additional relationship properties"
     )
     

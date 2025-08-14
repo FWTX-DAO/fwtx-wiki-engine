@@ -176,25 +176,52 @@ function initializeGraph() {
 
 async function loadGraphData() {
     try {
-        // Query for Fort Worth government structure
-        const response = await fetch(`${API_BASE_URL}/chat`, {
-            method: 'POST',
+        // Load all graph data from API
+        const response = await fetch(`${API_BASE_URL}/graph/all`, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query: 'Fort Worth government structure mayor city council',
-                entity_category: 'government',
-                use_custom_filter: true
-            })
+                'X-API-Key': localStorage.getItem('apiKey') || ''
+            }
         });
         
         if (response.ok) {
             const data = await response.json();
-            if (data.results && data.results.length > 0) {
-                processGraphResults(data.results);
+            if (data.nodes && data.nodes.length > 0) {
+                // Convert API data to Cytoscape format
+                const elements = [];
+                
+                // Add nodes
+                data.nodes.forEach(node => {
+                    elements.push({
+                        data: {
+                            id: node.id,
+                            label: node.name || node.label || node.entity_name,
+                            type: node.labels?.[0] || node.entity_type || 'unknown',
+                            ...node.properties
+                        }
+                    });
+                });
+                
+                // Add edges
+                if (data.edges) {
+                    data.edges.forEach(edge => {
+                        elements.push({
+                            data: {
+                                id: `edge-${edge.source}-${edge.target}`,
+                                source: edge.source,
+                                target: edge.target,
+                                label: edge.fact_name || edge.label || edge.type || 'related'
+                            }
+                        });
+                    });
+                }
+                
+                cy.elements().remove();
+                cy.add(elements);
+                cy.layout({ name: 'cose' }).run();
+                updateGraphCounts();
             } else {
-                // Load sample data as fallback
+                // No data available
                 loadSampleGraphData();
             }
         } else {
@@ -207,86 +234,27 @@ async function loadGraphData() {
 }
 
 function loadSampleGraphData() {
-    // Sample data representing Fort Worth government structure
+    // Display minimal placeholder when no data is available
     const elements = [
-        // Nodes with temporal and episode data
         { data: { 
-            id: 'fw', 
-            label: 'City of Fort Worth', 
-            type: 'home_rule_city',
-            valid_from: '1873-02-26',
-            episodeBorder: 2
+            id: 'placeholder', 
+            label: 'No data loaded', 
+            type: 'message'
         }},
         { data: { 
-            id: 'mayor', 
-            label: 'Mayor', 
-            type: 'position',
-            term_length_years: 2,
-            episodeBorder: 0
+            id: 'instruction', 
+            label: 'Run sync to populate knowledge graph', 
+            type: 'message'
         }},
         { data: { 
-            id: 'council', 
-            label: 'City Council', 
-            type: 'government',
-            episodeBorder: 0
-        }},
-        { data: { 
-            id: 'manager', 
-            label: 'City Manager', 
-            type: 'position',
-            position_type: 'appointed',
-            episodeBorder: 0
-        }},
-        { data: { 
-            id: 'charter', 
-            label: 'City Charter', 
-            type: 'document',
-            charter_adopted_date: '1924-01-01',
-            episodeBorder: 2
-        }},
-        { data: { 
-            id: 'person1', 
-            label: 'Mattie Parker', 
-            type: 'person',
-            current_position: 'Mayor',
-            valid_from: '2021-06-01',
-            episodeBorder: 2
-        }},
-        { data: { 
-            id: 'person2', 
-            label: 'David Cooke', 
-            type: 'person',
-            current_position: 'City Manager',
-            valid_from: '2014-06-01',
-            episodeBorder: 2
-        }},
-        
-        // Edges with temporal data
-        { data: { 
-            source: 'fw', 
-            target: 'mayor', 
-            label: 'has position',
-            valid_from: '1873-02-26'
-        }},
-        { data: { source: 'fw', target: 'council', label: 'part of' } },
-        { data: { source: 'council', target: 'manager', label: 'appoints' } },
-        { data: { source: 'fw', target: 'charter', label: 'governed by' } },
-        { data: { 
-            source: 'person1', 
-            target: 'mayor', 
-            label: 'holds',
-            valid_from: '2021-06-01'
-        }},
-        { data: { 
-            source: 'person2', 
-            target: 'manager', 
-            label: 'holds',
-            valid_from: '2014-06-01'
+            source: 'placeholder', 
+            target: 'instruction', 
+            label: 'action needed'
         }}
     ];
     
     cy.add(elements);
-    cy.layout({ name: 'cose' }).run();
+    cy.layout({ name: 'grid' }).run();
     updateGraphCounts();
 }
 

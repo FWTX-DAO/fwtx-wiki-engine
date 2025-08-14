@@ -7,7 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "falkordb>=1.2.0",
     "fastapi>=0.116.0",
-    "graphiti-core>=0.17.1",
+    "graphiti-core>=0.18.2",
     "pydantic-settings>=2.10.1",
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",

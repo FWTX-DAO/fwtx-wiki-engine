@@ -13,7 +13,6 @@ from src.api.chat import router
 from src.api.sync import router as sync_router
 from src.api.research import router as research_router
 from src.api.graph import router as graph_router
-
 from src.services.graphiti.index import init as graphiti_init
 from src.services.sync.scheduler import start_sync_scheduler, stop_sync_scheduler
 from src.ascii_art import FULL_BANNER

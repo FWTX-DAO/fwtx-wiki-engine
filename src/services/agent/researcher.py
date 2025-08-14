@@ -142,16 +142,19 @@ class FortWorthResearchWorkflow(Workflow):
         self.cache_enabled = settings.AGENT_CACHE_ENABLED
         self.cache_ttl_hours = settings.AGENT_CACHE_TTL_HOURS
     
-    def run(self, research_task: Dict[str, Any]) -> Iterator[RunResponse]:
+    def run(self) -> Iterator[RunResponse]:
         """
         Run research workflow for a specific task.
         
-        Args:
-            research_task: Dictionary containing research configuration
+        The research task should be set in session_state['research_task'] before calling run().
             
         Yields:
             RunResponse objects with research results
         """
+        research_task = self.session_state.get('research_task')
+        if not research_task:
+            raise ValueError("No research task found in session state")
+            
         task_name = research_task.get('name', 'Unknown Task')
         
         # Check cache if enabled
@@ -236,6 +239,19 @@ Please research the following information about Fort Worth, Texas municipal gove
         # Add URLs to check
         if 'fetch_url' in config:
             prompt += f"Primary source to check: {config['fetch_url']}\n\n"
+        
+        # Add data content to process
+        if 'data_content' in config:
+            prompt += "Data content provided for processing:\n"
+            prompt += "=" * 80 + "\n"
+            prompt += config['data_content'][:5000]  # Limit to first 5000 chars to avoid token limits
+            if len(config['data_content']) > 5000:
+                prompt += "\n... (content truncated)"
+            prompt += "\n" + "=" * 80 + "\n\n"
+        
+        # Add custom instructions
+        if 'instructions' in config:
+            prompt += config['instructions'] + "\n\n"
         
         # Add structured output format requirements
         prompt += """Output Requirements:
@@ -439,8 +455,11 @@ Ensure all data is properly structured and validated according to TOP specificat
         for task in tasks:
             logger.info(f"Researching: {task['name']}")
             
+            # Set the task in session state
+            self.session_state['research_task'] = task
+            
             # Run the research
-            response_iter = self.run(task)
+            response_iter = self.run()
             
             # Consume the iterator to get results
             for response in response_iter:
@@ -476,8 +495,11 @@ async def research_fort_worth_topic(topic: str, data_requirements: List[str] = N
         }
     }
     
+    # Set the task in session state
+    workflow.session_state['research_task'] = research_task
+    
     results = []
-    for response in workflow.run(research_task):
+    for response in workflow.run():
         if response.content:
             results.append(response.content)
     
@@ -508,5 +530,8 @@ if __name__ == "__main__":
         }
     }
     
-    response = workflow.run(test_task)
+    # Set the task in session state
+    workflow.session_state['research_task'] = test_task
+    
+    response = workflow.run()
     pprint_run_response(response, markdown=True, show_time=True)

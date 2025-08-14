@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -6,6 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings(BaseSettings):
+    # Base directory path
+    BASE_DIR: Path = Path(__file__).parent.parent
     ALLOWED_ORIGINS: str = os.getenv("ALLOWED_ORIGINS", "")
     
     # API Documentation
